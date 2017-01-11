@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringUI
-@Theme("valo")
+@Theme("portal")
 public class VaadinUI extends UI {
 
     private TabSheet tabsheet;
@@ -31,6 +31,7 @@ public class VaadinUI extends UI {
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         tabsheet = new TabSheet();
+        tabsheet.addStyleName("main");
         tabsheet.setSizeFull();
         tabsheet.addComponents(patientView);
         tabsheet.addComponent(analyticsView);
@@ -70,6 +71,7 @@ public class VaadinUI extends UI {
             if (!subviews.isEmpty()) {
                 makeSubViewVisible(subviews.getFirst());
             }
+            ((MainView)tabsheet.getSelectedTab()).subViewClose();
         }
     }
 

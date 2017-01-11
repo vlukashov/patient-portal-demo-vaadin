@@ -57,4 +57,8 @@ public class AnalyticsView extends MainView {
         return vl;
     }
 
+    @Override
+    public void subViewClose() {
+        // NOOP
+    }
 }

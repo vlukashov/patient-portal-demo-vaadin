@@ -7,13 +7,18 @@ import com.vaadin.demo.service.PatientService;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import com.vaadin.ui.themes.ValoTheme;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Created by mstahv
@@ -37,12 +42,15 @@ public class PatientDetails extends SubView {
     @Autowired
     JournalEntryForm journalEntryForm;
 
-    Button editBtn = new Button("EDIT");
-    Button addBtn = new Button("ADD");
-    Button back = new Button("ALL PATIENTS", FontAwesome.ARROW_LEFT);
-    private Patient patient;
+    Button editBtn = new Button("Edit Patient");
+    Button addBtn = new Button("Add");
+    Button back = new Button("All Patients", FontAwesome.ARROW_LEFT);
+
+    private Patient patient, lastJournalPatient, lastProfilePatient;
 
     public PatientDetails() {
+        getTabsheet().addSelectedTabChangeListener(event -> populate());
+
         profile.setCaption("Profile");
         profile.setSpacing(true);
         profile.setMargin(true);
@@ -54,6 +62,9 @@ public class PatientDetails extends SubView {
         addTab(journal);
 
         editBtn.addClickListener(e -> edit());
+        editBtn.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+        editBtn.addStyleName("uppercase");
+
         addBtn.addClickListener(e -> addJournal());
         setTopRightComponent(editBtn);
         getTabsheet().addSelectedTabChangeListener(e -> {
@@ -66,52 +77,78 @@ public class PatientDetails extends SubView {
         });
 
         back.addClickListener(e -> close());
+        back.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+        back.addStyleName("uppercase");
         setTopLeftComponent(back);
 
     }
 
     void showPatient(Patient p) {
-        if(p.isPersistent()) {
+        if (p.isPersistent()) {
             p = patientService.findAttached(p); // fetch with joins to history etc
         }
         patient = p;
 
+        populate();
+
+        show();
+    }
+
+    private void populate() {
+        if (patient == null) {
+            return;
+        }
+        Component selectedTab = getTabsheet().getSelectedTab();
+        if (selectedTab.equals(profile)) {
+            populateProfile();
+        } else {
+            populateJournal();
+        }
+    }
+
+    private void populateProfile() {
+        if (patient.equals(lastProfilePatient)) {
+            return;
+        }
         profile.removeAllComponents();
 
-        Label fn = new Label(p.getFirstName());
-        fn.setCaption("FIRST NAME");
-        fn.setStyleName(ValoTheme.LABEL_H3);
-        Label mn = new Label(p.getMiddleName());
-        mn.setCaption("MIDDLE NAME");
-        mn.setStyleName(ValoTheme.LABEL_H3);
-        Label ln = new Label(p.getLastName());
-        ln.setCaption("LAST NAME");
-        ln.setStyleName(ValoTheme.LABEL_H3);
-        HorizontalLayout nameLayout = new HorizontalLayout(fn, mn, ln);
+        HorizontalLayout nameLayout = new HorizontalLayout();
+        nameLayout.addComponent(getNameLabel(patient.getFirstName(), "First Name"));
+        nameLayout.addComponent(getNameLabel(patient.getMiddleName(), "Middle Name"));
+        nameLayout.addComponent(getNameLabel(patient.getLastName(), "Last Name"));
         nameLayout.setSpacing(true);
+
         profile.addComponent(nameLayout);
 
         // TODO BIND data, manually is the only option for read only?
         FormLayout fl = new FormLayout();
-        fl.addComponent(label("Gender", p.getGender()));
-        fl.addComponent(label("Date of birth", p.getBirthDate()));
-        fl.addComponent(label("Snn", p.getSsn()));
-        fl.addComponent(label("Patient ID", p.getId()));
-        fl.addComponent(label("Doctor", p.getDoctor()));
-        fl.addComponent(label("Medical record", p.getMedicalRecord()));
-        fl.addComponent(label("Last visit", p.getLastVisit()));
+        fl.addStyleName("data-layout");
+        fl.setMargin(false);
+        fl.addComponent(createLabel("Gender", patient.getGender().toString().substring(0, 1) + patient.getGender().toString().substring(1).toLowerCase()));
+        fl.addComponent(createLabel("Date of birth", patient.getBirthDate() == null ? "" : SimpleDateFormat.getDateInstance().format(patient.getBirthDate())));
+        fl.addComponent(createLabel("Snn", patient.getSsn()));
+        fl.addComponent(createLabel("Patient ID", patient.getId()));
+        fl.addComponent(createLabel("Doctor", patient.getDoctor()));
+        fl.addComponent(createLabel("Medical record", patient.getMedicalRecord()));
+        fl.addComponent(createLabel("Last visit", patient.getLastVisit() == null ? "" : SimpleDateFormat.getDateInstance().format(patient.getLastVisit())));
 
         profile.addComponent(fl);
+        lastProfilePatient = patient;
+    }
 
-
+    private void populateJournal() {
+        if (patient.equals(lastJournalPatient)) {
+            return;
+        }
         journal.removeAllComponents();
 
         Grid<JournalEntry> journalEntryGrid = new Grid<>();
         journalEntryGrid.setCaption(patient.toString());
-        journalEntryGrid.addColumn("Date", j -> SimpleDateFormat.getDateInstance().format(j.getDate()));
-        journalEntryGrid.addColumn("Appointment", j -> j.getAppointmentType().toString());
-        journalEntryGrid.addColumn("Doctor", j -> j.getDoctor().toString());
-        journalEntryGrid.addColumn("Notes", JournalEntry::getEntry).setWidth(200); // TODO how to set expand ratio + overflow or set relative width??
+        journalEntryGrid.addColumn(j -> SimpleDateFormat.getDateInstance().format(j.getDate())).setCaption("Date");
+        journalEntryGrid.addColumn(j -> j.getAppointmentType().toString()).setCaption("Appointment");
+        journalEntryGrid.addColumn(j -> j.getDoctor().toString()).setCaption("Doctor").setExpandRatio(1);
+        journalEntryGrid.addColumn(JournalEntry::getEntry).setCaption("Notes").setExpandRatio(1).setMaximumWidth(450); // TODO how to set expand ratio + overflow or set relative width??
+
         journalEntryGrid.setDetailsGenerator(j -> {
             Label l = new Label(j.getEntry());
             l.setWidth("100%");
@@ -120,6 +157,7 @@ public class PatientDetails extends SubView {
             vl.setMargin(true);
             return vl;
         });
+
 
         journalEntryGrid.addItemClickListener(e -> {
             journalEntryGrid.setDetailsVisible(e.getItem(), !journalEntryGrid.isDetailsVisible(e.getItem()));
@@ -130,10 +168,17 @@ public class PatientDetails extends SubView {
         journalEntryGrid.setWidth(100, Unit.PERCENTAGE);
         journal.addComponent(journalEntryGrid);
 
-        show();
+        lastJournalPatient = patient;
     }
 
-    private Label label(String caption, Object value) {
+    private Label getNameLabel(String content, String caption) {
+        Label label = createLabel(caption, content);
+        label.addStyleName("name-label");
+        label.addStyleName("uppercase");
+        return label;
+    }
+
+    private Label createLabel(String caption, Object value) {
         Label l = new Label(value == null ? "" : value.toString());
         l.setCaption(caption);
         return l;

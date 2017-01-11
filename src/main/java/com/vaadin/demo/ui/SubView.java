@@ -19,6 +19,7 @@ public abstract class SubView extends AbsoluteLayout {
         setSizeFull();
         tabSheet.setSizeFull();
         tabSheet.addStyleName(ValoTheme.TABSHEET_CENTERED_TABS);
+        tabSheet.addStyleName("detail-tabs");
         CssLayout cssLayout = new CssLayout(tabSheet);
         cssLayout.setStyleName(ValoTheme.LAYOUT_CARD);
         cssLayout.setSizeFull();

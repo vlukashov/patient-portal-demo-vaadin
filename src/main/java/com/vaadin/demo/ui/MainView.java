@@ -18,4 +18,5 @@ public abstract class MainView extends VerticalLayout implements View {
         // NOP, not needed
     }
 
+    public abstract void subViewClose();
 }

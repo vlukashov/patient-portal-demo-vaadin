@@ -5,11 +5,17 @@ import com.vaadin.demo.repositories.PatientRepository;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.*;
-import com.vaadin.ui.renderers.ButtonRenderer;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
 import javax.annotation.PostConstruct;
+import java.text.SimpleDateFormat;
 
 
 /**
@@ -35,29 +41,40 @@ public class PatientView extends MainView {
     @PostConstruct
     void init() {
         patients = new Grid<>();
-        patients.setSizeFull();
-        patients.addColumn("Name", patient->patient.getFirstName() + " " + patient.getLastName());
-        patients.addColumn("Id", patient->patient.getId().toString());
-        patients.addColumn("Medical record", patient->patient.getMedicalRecord().toString());
-        patients.addColumn("Doctor", patient->patient.getDoctor().getFirstName() + " " + patient.getDoctor().getLastName());
-        patients.addColumn("Last visit", patient-> {return  (patient.getLastVisit() == null) ? "" : patient.getLastVisit().toString();});
-        
-        // TODO how the hell should I create to buttons, other with "DANGER" + confirm dialog, in one column, for real
+        patients.setSelectionMode(Grid.SelectionMode.SINGLE);
 
-        ButtonRenderer<Patient> br = new ButtonRenderer<>( e -> {
-            Patient p = e.getItem();
-            focusPatient(p);
-        });
-        patients.addColumn(p->"editBtn", br).setCaption("");
-        patients.addColumn(p->"delete", new ButtonRenderer<>(e->deletePatient(e.getItem()))).setCaption("");
+        patients.setHeight("100%");
+        patients.setSizeFull();
+        patients.addColumn(patient -> patient.getFirstName() + " " + patient.getLastName()).setId("name").setCaption("Name");
+        patients.addColumn(patient -> patient.getId().toString()).setId("id").setCaption("Id");
+        patients.addColumn(patient -> patient.getMedicalRecord().toString()).setId("medicalRecord").setCaption("Medical record");
+        patients.addColumn(patient -> patient.getDoctor().getFirstName() + " " + patient.getDoctor().getLastName()).setId("doctor").setCaption("Doctor");
+        patients.addColumn(patient -> {
+            return (patient.getLastVisit() == null) ? "" : SimpleDateFormat.getDateInstance().format(patient.getLastVisit());
+        }).setId("lastVisit").setCaption("Last visit");
+
+        // TODO how the hell should I create to buttons, other with "DANGER" + confirm dialog, in one column, for real
+//        ButtonRenderer<Patient> br = new ButtonRenderer<>( e -> {
+//            Patient p = e.getItem();
+//            focusPatient(p);
+//        });
+//        patients.addColumn(p->"editBtn", br).setCaption("");
+//        patients.addColumn(p->"delete", new ButtonRenderer<>(e->deletePatient(e.getItem()))).setCaption("");
+
         listPatients();
 
-        newPatientBtn = new Button("Add patient");
-        newPatientBtn.setIcon(FontAwesome.PLUS);
+        newPatientBtn = new Button("Add new patient");
+        newPatientBtn.setIcon(FontAwesome.PLUS); // Planned to not replaced!
+        newPatientBtn.addStyleName("addButton");
         newPatientBtn.addClickListener(e -> {
-            Patient patient = new Patient();
-            patientDetails.showPatient(patient);
+            focusPatient(new Patient());
             patientDetails.edit();
+        });
+
+        patients.addSelectionListener(e -> {
+            Patient value = patients.asSingleSelect().getValue();
+            if (value != null)
+                focusPatient(value);
         });
 
         VerticalLayout layout = new VerticalLayout();
@@ -66,11 +83,11 @@ public class PatientView extends MainView {
         layout.addComponents(newPatientBtn, patients);
         layout.setComponentAlignment(newPatientBtn, Alignment.TOP_RIGHT);
         layout.setExpandRatio(patients, 1);
-        
+
         layout.setSizeFull();
-        
+
         addComponent(layout);
-        
+
     }
 
     public void listPatients() {
@@ -91,13 +108,13 @@ public class PatientView extends MainView {
 
         Button delete = new Button("Delete");
         delete.setStyleName(ValoTheme.BUTTON_DANGER);
-        delete.addClickListener(e-> {
+        delete.addClickListener(e -> {
             repo.delete(patient);
             window.close();
         });
 
         Button cancel = new Button("Cancel");
-        cancel.addClickListener(e-> {
+        cancel.addClickListener(e -> {
             window.close();
         });
         HorizontalLayout actions = new HorizontalLayout(cancel, delete);
@@ -113,4 +130,8 @@ public class PatientView extends MainView {
 
     }
 
+    @Override
+    public void subViewClose() {
+        patients.getSelectionModel().deselectAll();
+    }
 }

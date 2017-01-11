@@ -53,13 +53,13 @@ public class JournalEntryForm extends SubView {
     @PostConstruct
     public void init() {
         VerticalLayout layout = new VerticalLayout();
-        layout.setCaption("Edit Patient");
+        layout.setCaption("New Journal Entry");
         layout.setSizeFull();
         FormLayout formlayout = new FormLayout(patient, date, type, doctor);
         formlayout.setMargin(true);
         layout.addComponent(formlayout);
 
-        Label l = new Label("NOTES");
+        Label l = new Label("Notes");
         layout.addComponent(new VerticalLayout(l, entry));
         final HorizontalLayout horizontalLayout = new HorizontalLayout(save, cancel);
         horizontalLayout.setSpacing(true);
@@ -69,7 +69,7 @@ public class JournalEntryForm extends SubView {
         doctor.setItems(doctorRepository.findAll());
 
         save.addClickListener(e -> {
-            Patient p = bb.getBean().get().getPatient();
+            Patient p = bb.getBean().getPatient();
             repo.save(p);
             close();
             // For better separation of concern, one should consider using

@@ -22,6 +22,12 @@ $v-font-color: #434D54;
     border: none;
   }
 
+  .v-grid .v-grid-row-selected > .v-grid-cell {
+    background: #454D53 none;
+    color: #fff;
+    border: none;
+  }
+
   .v-grid-header .v-grid-cell {
     text-transform: uppercase;
     border-color: transparent;
@@ -141,5 +147,35 @@ $v-font-color: #434D54;
   .data-edit-layout .v-formlayout-captioncell {
     text-transform: uppercase;
     color: #B5B9BC;
+    padding-left: 0;
+  }
+
+  .open-close-selection.v-grid {
+    v-grid-row {
+      background: inherit;
+    }
+    v-grid-row-focused {
+      background: inherit;
+      border: none;
+    }
+
+    .v-grid-row-selected > .v-grid-cell {
+      background: inherit;
+      border: none;
+      color: inherit;
+    }
+
+  }
+
+  .content-layout{
+    padding: 50px;
+  }
+
+  .v-button-borderless.v-button-danger {
+    color: #FF5DBA;
+    &:hover {
+      background: #FF5DBA;
+      color: #fff;
+    }
   }
 }

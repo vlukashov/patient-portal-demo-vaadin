@@ -63,6 +63,9 @@ public class VaadinUI extends UI {
     }
 
     public void closeSubView(SubView subView) {
+        closeSubView(subView, false);
+    }
+    public void closeSubView(SubView subView, boolean informMainPanel) {
         if (subviews.contains(subView)) {
             // close also sub-sub views
             while (subviews.contains(subView)) {
@@ -71,6 +74,7 @@ public class VaadinUI extends UI {
             if (!subviews.isEmpty()) {
                 makeSubViewVisible(subviews.getFirst());
             }
+            if(informMainPanel)
             ((MainView)tabsheet.getSelectedTab()).subViewClose();
         }
     }

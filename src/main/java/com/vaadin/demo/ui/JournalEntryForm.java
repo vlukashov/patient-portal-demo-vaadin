@@ -10,6 +10,7 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
@@ -82,6 +83,7 @@ public class JournalEntryForm extends SubView {
         
         addTab(layout);
 
+        secondaryCancel.addStyleName(ValoTheme.BUTTON_BORDERLESS);
         secondaryCancel.addClickListener(e-> close());
         setTopRightComponent(secondaryCancel);
 

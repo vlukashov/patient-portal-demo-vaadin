@@ -8,11 +8,7 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
-import com.vaadin.ui.themes.ValoTheme;
 
 import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
@@ -53,14 +49,6 @@ public class PatientView extends MainView {
             return (patient.getLastVisit() == null) ? "" : SimpleDateFormat.getDateInstance().format(patient.getLastVisit());
         }).setId("lastVisit").setCaption("Last visit");
 
-        // TODO how the hell should I create to buttons, other with "DANGER" + confirm dialog, in one column, for real
-//        ButtonRenderer<Patient> br = new ButtonRenderer<>( e -> {
-//            Patient p = e.getItem();
-//            focusPatient(p);
-//        });
-//        patients.addColumn(p->"editBtn", br).setCaption("");
-//        patients.addColumn(p->"delete", new ButtonRenderer<>(e->deletePatient(e.getItem()))).setCaption("");
-
         listPatients();
 
         newPatientBtn = new Button("Add new patient");
@@ -91,43 +79,12 @@ public class PatientView extends MainView {
     }
 
     public void listPatients() {
+        repo.flush();
         patients.setItems(repo.findAll());
     }
 
     private void focusPatient(Patient p) {
         patientDetails.showPatient(p);
-    }
-
-    private void deletePatient(Patient patient) {
-        Window window = new Window();
-        window.setCaption("Are you sure?");
-        window.setClosable(false);
-        window.setResizable(false);
-        window.setModal(true);
-        Label label = new Label("You are about to delete patient details of " + patient + ".");
-
-        Button delete = new Button("Delete");
-        delete.setStyleName(ValoTheme.BUTTON_DANGER);
-        delete.addClickListener(e -> {
-            repo.delete(patient);
-            window.close();
-        });
-
-        Button cancel = new Button("Cancel");
-        cancel.addClickListener(e -> {
-            window.close();
-        });
-        HorizontalLayout actions = new HorizontalLayout(cancel, delete);
-        actions.setSpacing(true);
-
-        VerticalLayout layout = new VerticalLayout(label, actions);
-        layout.setMargin(true);
-        layout.setSpacing(true);
-
-        window.setContent(layout);
-
-        getUI().addWindow(window);
-
     }
 
     @Override

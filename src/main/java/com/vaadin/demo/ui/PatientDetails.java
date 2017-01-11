@@ -5,10 +5,13 @@ import com.vaadin.demo.entities.Patient;
 import com.vaadin.demo.repositories.PatientRepository;
 import com.vaadin.demo.service.PatientService;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
@@ -33,8 +36,8 @@ public class PatientDetails extends SubView {
     @Autowired
     PatientService patientService;
 
-    VerticalLayout profile = new VerticalLayout();
-    VerticalLayout journal = new VerticalLayout();
+    CssLayout profile = new CssLayout();
+    CssLayout journal = new CssLayout();
 
     @Autowired
     PatientForm form = new PatientForm();
@@ -43,38 +46,31 @@ public class PatientDetails extends SubView {
     JournalEntryForm journalEntryForm;
 
     Button editBtn = new Button("Edit Patient");
-    Button addBtn = new Button("Add");
+    Button addBtn = new Button("New Entry", FontAwesome.PLUS);
     Button back = new Button("All Patients", FontAwesome.ARROW_LEFT);
 
+    // Added last so we don't build the views again for no reason.
     private Patient patient, lastJournalPatient, lastProfilePatient;
 
     public PatientDetails() {
         getTabsheet().addSelectedTabChangeListener(event -> populate());
 
         profile.setCaption("Profile");
-        profile.setSpacing(true);
-        profile.setMargin(true);
+        profile.addStyleName("content-layout");
         addTab(profile);
 
         journal.setCaption("Journal");
-        journal.setSpacing(true);
-        journal.setMargin(true);
+        journal.addStyleName("content-layout");
         addTab(journal);
 
         editBtn.addClickListener(e -> edit());
         editBtn.addStyleName(ValoTheme.BUTTON_BORDERLESS);
         editBtn.addStyleName("uppercase");
 
-        addBtn.addClickListener(e -> addJournal());
         setTopRightComponent(editBtn);
-        getTabsheet().addSelectedTabChangeListener(e -> {
-            if (e.getTabSheet().getSelectedTab() == journal) {
-                setTopRightComponent(addBtn);
-            } else {
-                setTopRightComponent(editBtn);
-            }
 
-        });
+        addBtn.addClickListener(e -> addJournal());
+        addBtn.addStyleName("addButton");
 
         back.addClickListener(e -> close());
         back.addStyleName(ValoTheme.BUTTON_BORDERLESS);
@@ -88,6 +84,7 @@ public class PatientDetails extends SubView {
             p = patientService.findAttached(p); // fetch with joins to history etc
         }
         patient = p;
+        lastJournalPatient = lastProfilePatient = null;
 
         populate();
 
@@ -124,7 +121,7 @@ public class PatientDetails extends SubView {
         FormLayout fl = new FormLayout();
         fl.addStyleName("data-layout");
         fl.setMargin(false);
-        fl.addComponent(createLabel("Gender", patient.getGender().toString().substring(0, 1) + patient.getGender().toString().substring(1).toLowerCase()));
+        fl.addComponent(createLabel("Gender", patient.getGender() == null ? "" : patient.getGender().toString().substring(0, 1) + patient.getGender().toString().substring(1).toLowerCase()));
         fl.addComponent(createLabel("Date of birth", patient.getBirthDate() == null ? "" : SimpleDateFormat.getDateInstance().format(patient.getBirthDate())));
         fl.addComponent(createLabel("Snn", patient.getSsn()));
         fl.addComponent(createLabel("Patient ID", patient.getId()));
@@ -142,8 +139,15 @@ public class PatientDetails extends SubView {
         }
         journal.removeAllComponents();
 
+        Label patientName = new Label("<h2>"+patient.toString()+"</h2>", ContentMode.HTML);
+        HorizontalLayout header = new HorizontalLayout(patientName, addBtn);
+        header.setWidth("100%");
+        header.setComponentAlignment(patientName, Alignment.MIDDLE_LEFT);
+        header.setComponentAlignment(addBtn, Alignment.MIDDLE_RIGHT);
+        journal.addComponent(header);
+
         Grid<JournalEntry> journalEntryGrid = new Grid<>();
-        journalEntryGrid.setCaption(patient.toString());
+        journalEntryGrid.addStyleName("open-close-selection");
         journalEntryGrid.addColumn(j -> SimpleDateFormat.getDateInstance().format(j.getDate())).setCaption("Date");
         journalEntryGrid.addColumn(j -> j.getAppointmentType().toString()).setCaption("Appointment");
         journalEntryGrid.addColumn(j -> j.getDoctor().toString()).setCaption("Doctor").setExpandRatio(1);

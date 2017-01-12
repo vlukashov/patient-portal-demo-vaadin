@@ -4,6 +4,7 @@ import com.vaadin.demo.entities.JournalEntry;
 import com.vaadin.demo.entities.Patient;
 import com.vaadin.demo.repositories.PatientRepository;
 import com.vaadin.demo.service.PatientService;
+import com.vaadin.server.ExternalResource;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringComponent;
@@ -15,6 +16,7 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -57,10 +59,12 @@ public class PatientDetails extends SubView {
 
         profile.setCaption("Profile");
         profile.addStyleName("content-layout");
+        profile.setWidth("100%");
         addTab(profile);
 
         journal.setCaption("Journal");
         journal.addStyleName("content-layout");
+        journal.setWidth("100%");
         addTab(journal);
 
         editBtn.addClickListener(e -> edit());
@@ -109,6 +113,7 @@ public class PatientDetails extends SubView {
         }
         profile.removeAllComponents();
 
+
         HorizontalLayout nameLayout = new HorizontalLayout();
         nameLayout.addComponent(getNameLabel(patient.getFirstName(), "First Name"));
         nameLayout.addComponent(getNameLabel(patient.getMiddleName(), "Middle Name"));
@@ -124,12 +129,27 @@ public class PatientDetails extends SubView {
         fl.addComponent(createLabel("Gender", patient.getGender() == null ? "" : patient.getGender().toString().substring(0, 1) + patient.getGender().toString().substring(1).toLowerCase()));
         fl.addComponent(createLabel("Date of birth", patient.getBirthDate() == null ? "" : SimpleDateFormat.getDateInstance().format(patient.getBirthDate())));
         fl.addComponent(createLabel("Snn", patient.getSsn()));
-        fl.addComponent(createLabel("Patient ID", patient.getId()));
+        Label label = createLabel("Patient ID", patient.getId());
+        label.setHeight("60px");
+        fl.addComponent(label);
         fl.addComponent(createLabel("Doctor", patient.getDoctor()));
         fl.addComponent(createLabel("Medical record", patient.getMedicalRecord()));
         fl.addComponent(createLabel("Last visit", patient.getLastVisit() == null ? "" : SimpleDateFormat.getDateInstance().format(patient.getLastVisit())));
 
-        profile.addComponent(fl);
+        if (patient != null && patient.getGender() != null && patient.getId() != null) {
+            Image image = new Image(null, new ExternalResource(getRandomImageUrl()));
+            image.setHeight("100%");
+
+            HorizontalLayout infoLayout = new HorizontalLayout(fl, image);
+            infoLayout.setWidth("100%");
+            infoLayout.setExpandRatio(fl, 60);
+            infoLayout.setExpandRatio(image, 40);
+            infoLayout.setComponentAlignment(image, Alignment.MIDDLE_CENTER);
+
+            profile.addComponent(infoLayout);
+        } else {
+            profile.addComponent(fl);
+        }
         lastProfilePatient = patient;
     }
 
@@ -139,7 +159,7 @@ public class PatientDetails extends SubView {
         }
         journal.removeAllComponents();
 
-        Label patientName = new Label("<h2>"+patient.toString()+"</h2>", ContentMode.HTML);
+        Label patientName = new Label("<h2>" + patient.toString() + "</h2>", ContentMode.HTML);
         HorizontalLayout header = new HorizontalLayout(patientName, addBtn);
         header.setWidth("100%");
         header.setComponentAlignment(patientName, Alignment.MIDDLE_LEFT);
@@ -151,7 +171,7 @@ public class PatientDetails extends SubView {
         journalEntryGrid.addColumn(j -> SimpleDateFormat.getDateInstance().format(j.getDate())).setCaption("Date");
         journalEntryGrid.addColumn(j -> j.getAppointmentType().toString()).setCaption("Appointment");
         journalEntryGrid.addColumn(j -> j.getDoctor().toString()).setCaption("Doctor").setExpandRatio(1);
-        journalEntryGrid.addColumn(JournalEntry::getEntry).setCaption("Notes").setExpandRatio(1).setMaximumWidth(450); // TODO how to set expand ratio + overflow or set relative width??
+        journalEntryGrid.addColumn(JournalEntry::getEntry).setCaption("Notes").setExpandRatio(1).setMaximumWidth(400); // TODO how to set expand ratio + overflow or set relative width??
 
         journalEntryGrid.setDetailsGenerator(j -> {
             Label l = new Label(j.getEntry());
@@ -169,7 +189,7 @@ public class PatientDetails extends SubView {
 
         journalEntryGrid.setItems(patient.getJournalEntries());
 
-        journalEntryGrid.setWidth(100, Unit.PERCENTAGE);
+        journalEntryGrid.setWidth("100%");
         journal.addComponent(journalEntryGrid);
 
         lastJournalPatient = patient;
@@ -192,11 +212,25 @@ public class PatientDetails extends SubView {
         JournalEntry journalEntry = new JournalEntry();
         journalEntry.setDate(new Date());
         journalEntry.setPatient(patient);
-        patient.getJournalEntries().add(0, journalEntry);
         journalEntryForm.editJournal(journalEntry);
     }
 
     public void edit() {
         form.editPatient(patient);
+    }
+
+    public String getRandomImageUrl() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("https://randomuser.me/api/portraits/");
+        switch (patient.getGender()) {
+            case MALE:
+                sb.append("men/");
+                break;
+            case FEMALE:
+                sb.append("women/");
+                break;
+        }
+        sb.append(patient.getId() % 100).append(".jpg");
+        return sb.toString();
     }
 }

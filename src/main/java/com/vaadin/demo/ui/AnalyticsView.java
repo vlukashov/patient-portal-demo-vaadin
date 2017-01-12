@@ -11,6 +11,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
 import javax.annotation.PostConstruct;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -34,24 +35,59 @@ public class AnalyticsView extends MainView {
         TabSheet tabSheet = new TabSheet();
         tabSheet.setSizeFull();
         tabSheet.setStyleName(ValoTheme.TABSHEET_CENTERED_TABS);
+        tabSheet.addStyleName("detail-tabs");
         addComponent(tabSheet);
 
-        tabSheet.addTab(getChart(), "Age");
-        tabSheet.addTab(getChart(), "Gender");
-        tabSheet.addTab(getChart(), "Doctor");
+        tabSheet.addTab(getAgeChart(), "Age");
+        tabSheet.addTab(getGenderChart(), "Gender");
+        tabSheet.addTab(getDoctorChart(), "Doctor");
 
         addComponent(tabSheet);
         setExpandRatio(tabSheet, 1);
     }
 
-    private Component getChart() {
+    private Layout getAgeChart() {
+        Chart chart = new Chart(ChartType.COLUMN);
+        chart.getConfiguration().setTitle("Patients bt Age");
+        DataSeries ds = new DataSeries();
+        List<StringLongPair> data = service.getStatsByAge();
+
+        data.sort(Comparator.comparing(StringLongPair::getGroup));
+
+        data.forEach(d->ds.add(new DataSeriesItem(d.getGroup(),d.getCount())));
+        chart.getConfiguration().addSeries(ds);
+        chart.getConfiguration().getxAxis().setType(AxisType.CATEGORY);
+
+        VerticalLayout vl = new VerticalLayout(chart);
+        vl.setMargin(true);
+        return vl;
+    }
+
+    private Layout getGenderChart() {
+        Chart chart = new Chart(ChartType.COLUMN);
+        chart.getConfiguration().setTitle("Gender");
+        DataSeries ds = new DataSeries();
+
+        List<StringLongPair> data = service.getStatsByGender();
+        data.forEach(d->ds.add(new DataSeriesItem(d.getGroup(),d.getCount())));
+        chart.getConfiguration().addSeries(ds);
+        chart.getConfiguration().getxAxis().setType(AxisType.CATEGORY);
+
+        VerticalLayout vl = new VerticalLayout(chart);
+        vl.setMargin(true);
+        return vl;
+    }
+
+    private Layout getDoctorChart() {
         Chart chart = new Chart(ChartType.COLUMN);
         chart.getConfiguration().setTitle("Avg. Patient age by Doctor");
         DataSeries ds = new DataSeries();
+
         List<StringLongPair> data = service.getStatsByDoctor();
         data.forEach(d->ds.add(new DataSeriesItem(d.getGroup(),d.getCount())));
         chart.getConfiguration().addSeries(ds);
         chart.getConfiguration().getxAxis().setType(AxisType.CATEGORY);
+
         VerticalLayout vl = new VerticalLayout(chart);
         vl.setMargin(true);
         return vl;

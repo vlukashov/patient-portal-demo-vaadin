@@ -4,6 +4,9 @@ $v-font-family: 'Ubuntu', sans-serif;
 $v-font-weight: 400;
 $v-font-color: #434D54;
 
+$font-green: #9DD22D;
+$danger-pink: #FF5DBA;
+
 .portal {
   @include valo;
 
@@ -31,7 +34,7 @@ $v-font-color: #434D54;
   .v-grid-header .v-grid-cell {
     text-transform: uppercase;
     border-color: transparent;
-    background: #9DD22D none;
+    background: $font-green none;
     color: #FFFFFF;
 
   }
@@ -45,55 +48,85 @@ $v-font-color: #434D54;
     border-color: transparent;
   }
 
-  .main .v-tabsheet-tabitemcell {
-    font-size: 16px;
-    line-height: 60px;
-    text-transform: uppercase;
-    width: 200px;
-    text-align: center;
-    color: #fff;
-    height: 100%;
+  .main {
+    .v-tabsheet-tabitemcell {
+      font-size: 16px;
+      line-height: 60px;
+      text-transform: uppercase;
+      width: 200px;
+      text-align: center;
+      color: #fff;
+      height: 100%;
 
-    &:hover {
-      background: #747C81;
+      &:hover {
+        background: #747C81;
+        .v-caption {
+          color: #ddd;
+        }
+      }
       .v-caption {
-        color: #ddd;
+        color: #fff;
       }
     }
-  }
-  .main .v-tabsheet-tabitem {
-    color: #fff;
-  }
-  .main .v-tabsheet-tabitem-selected {
-    background: #fff;
-    .v-caption {
-      border: none;
-      .v-captiontext {
-        color: #9DD22D;
+    .v-tabsheet-tabitem {
+      color: #fff;
+    }
+    .v-tabsheet-tabitem-selected {
+      background: #fff;
+      .v-caption {
+        border: none;
+        .v-captiontext {
+          color: $font-green;
+        }
       }
+    }
+
+    .v-tabsheet-tabcontainer {
+      background: #B5B9BC;
+    }
+
+    .v-tabsheet-content {
+      background: #fff;
     }
   }
 
-  .main .v-tabsheet-tabcontainer {
-    background: #B5B9BC;
-  }
+  .detail-tabs {
+    .v-tabsheet-tabitemcell {
+      font-size: 14px;
+      line-height: 40px;
+      text-transform: uppercase;
+      width: 150px;
+      text-align: center;
+      color: #fff;
+      height: 100%;
 
-  .portal .main .v-tabsheet-content {
-    background: #fff;
-  }
-  .portal .main .v-tabsheet-tabitemcell .v-caption {
-    color: #fff;
-  }
+      &:hover {
+        background: transparent;
+        .v-caption {
+          color: $font-green;
+        }
+      }
+    }
+    .v-tabsheet-tabitem-selected {
+      background: transparent;
+      .v-caption.v-caption {
+        color: $font-green;
+        border-color: $font-green;
+      }
+    }
+    .v-tabsheet-tabcontainer {
+      background: #fff;
+    }
 
-  .detail-tabs .v-tabsheet-tabitem-selected .v-caption.v-caption {
-    border-color: #9DD22D;
-    color: #9DD22D;
+    .v-tabsheet-content {
+      background: #fff;
+    }
   }
-
-  .detail-tabs .v-captiontext {
-    font-family: 'Ubuntu', sans-serif;
-    font-weight: 400;
-    font-size: 17px;
+  .main .detail-tabs .v-tabsheet-tabitemcell .v-caption {
+    color: $font-green;
+  }
+  .main .detail-tabs .v-tabsheet-tabitem-selected .v-caption {
+    border-bottom: 2px solid $font-green;
   }
 
   .addButton {
@@ -167,15 +200,22 @@ $v-font-color: #434D54;
 
   }
 
-  .content-layout{
+  .content-layout {
     padding: 50px;
   }
 
   .v-button-borderless.v-button-danger {
-    color: #FF5DBA;
+    color: $danger-pink;
     &:hover {
-      background: #FF5DBA;
+      background: $danger-pink;
       color: #fff;
     }
+  }
+
+  .buttons {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }

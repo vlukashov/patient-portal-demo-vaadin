@@ -40,6 +40,8 @@ public class VaadinUI extends UI {
 
         layout.addComponent(tabsheet);
         setContent(layout);
+
+        setResponsive(true);
     }
 
     public void showSubView(SubView subView) {
@@ -63,7 +65,7 @@ public class VaadinUI extends UI {
     }
 
     public void closeSubView(SubView subView) {
-        closeSubView(subView, false);
+        closeSubView(subView, true);
     }
     public void closeSubView(SubView subView, boolean informMainPanel) {
         if (subviews.contains(subView)) {

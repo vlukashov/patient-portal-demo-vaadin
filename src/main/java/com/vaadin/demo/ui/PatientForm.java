@@ -76,9 +76,9 @@ public class PatientForm extends SubView {
 
         bb.bindInstanceFields(this);
 
-        bb.addStatusChangeListener(e -> {
-            Notification.show("Contains errors:" + e.hasValidationErrors(), Notification.Type.TRAY_NOTIFICATION);
-        });
+//        bb.addStatusChangeListener(e -> {
+//            Notification.show("Contains errors:" + e.hasValidationErrors(), Notification.Type.TRAY_NOTIFICATION);
+//        });
 
         addTab(buildLayouts());
 
@@ -104,7 +104,7 @@ public class PatientForm extends SubView {
         cancel = new Button("Cancel");
         cancel.addStyleName(ValoTheme.BUTTON_BORDERLESS);
         cancel.addStyleName("uppercase");
-        cancel.addClickListener(e -> close());
+        cancel.addClickListener(e -> ((VaadinUI) getUI()).closeAllSubViews());
 
         delete = new Button("Delete", e -> deletePatient(bb.getBean()));
         delete.addStyleName(ValoTheme.BUTTON_BORDERLESS);
@@ -124,11 +124,12 @@ public class PatientForm extends SubView {
         layout.addStyleName("content-layout");
 
         FormLayout formlayout = new FormLayout(title, firstName, middleName, lastName, new Label(), gender, birthDate, ssn, medicalRecord);
-        formlayout.setMargin(true);
+//        formlayout.setMargin(true);
         formlayout.addStyleName("data-edit-layout");
 
         final HorizontalLayout buttonLayout = new HorizontalLayout(save, cancel, delete);
         buttonLayout.setSpacing(true);
+        buttonLayout.addStyleName("buttons");
 
         layout.addComponent(formlayout);
         layout.addComponent(buttonLayout);

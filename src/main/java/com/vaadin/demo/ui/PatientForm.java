@@ -76,9 +76,12 @@ public class PatientForm extends SubView {
 
         bb.bindInstanceFields(this);
 
-//        bb.addStatusChangeListener(e -> {
+        bb.addStatusChangeListener(e -> {
+            save.setEnabled(!e.hasValidationErrors());//bb.validate().isOk());
 //            Notification.show("Contains errors:" + e.hasValidationErrors(), Notification.Type.TRAY_NOTIFICATION);
-//        });
+        });
+
+        save.setEnabled(false);
 
         addTab(buildLayouts());
 

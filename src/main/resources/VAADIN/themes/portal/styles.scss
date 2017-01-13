@@ -177,6 +177,10 @@ $danger-pink: #FF5DBA;
     }
   }
 
+  .v-csslayout-data-layout > div:nth-child(odd) {
+    background: #FAFAFA;
+  }
+
   .data-edit-layout .v-formlayout-captioncell {
     text-transform: uppercase;
     color: #B5B9BC;
@@ -202,6 +206,36 @@ $danger-pink: #FF5DBA;
 
   .content-layout {
     padding: 50px;
+    img {
+      height: 100%;
+    }
+    &.mobile-profile {
+      img {
+        width: 66%;
+      }
+      img,
+      .v-horizontal {
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .v-layout {
+        padding-top: 20px;
+      }
+    }
+    &.mobile-journal {
+      padding: 5px;
+      .v-button {
+        float: right;
+      }
+      .v-label {
+        padding-left: 20px;
+      }
+      .v-verticallayout:nth-child(odd) {
+        background: #FAFAFA;
+        padding-right: 10px;
+      }
+    }
   }
 
   .v-button-borderless.v-button-danger {
@@ -217,5 +251,16 @@ $danger-pink: #FF5DBA;
     bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
+  }
+
+  /* Mobile */
+  .mobile-detail {
+    .v-formlayout-captioncell {
+      text-align: right;
+    }
+    .v-formlayout-row:nth-child(odd) {
+      background: transparent;
+    }
+
   }
 }

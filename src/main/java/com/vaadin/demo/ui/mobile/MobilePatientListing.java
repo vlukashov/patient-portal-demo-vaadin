@@ -2,6 +2,7 @@ package com.vaadin.demo.ui.mobile;
 
 import com.vaadin.demo.entities.Patient;
 import com.vaadin.demo.repositories.PatientRepository;
+import com.vaadin.demo.ui.PatientDetails;
 import com.vaadin.demo.ui.PatientView;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
@@ -26,6 +27,10 @@ public class MobilePatientListing extends MobileListing<Patient> {
     @Autowired
     @Lazy
     PatientView patientView;
+
+    @Autowired
+    @Lazy
+    private PatientDetails patientDetails;
 
     protected MobilePatientListing() {
         super(Patient.class);
@@ -68,6 +73,7 @@ public class MobilePatientListing extends MobileListing<Patient> {
 
     @Override
     protected void onAdd() {
-
+        focusPatient(new Patient());
+        patientDetails.edit();
     }
 }

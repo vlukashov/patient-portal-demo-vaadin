@@ -231,11 +231,25 @@ $danger-pink: #FF5DBA;
       .v-label {
         padding-left: 20px;
       }
-      .v-verticallayout:nth-child(odd) {
-        background: #FAFAFA;
-        padding-right: 10px;
+      .v-verticallayout {
+        padding-right: 15px;
+        &:nth-child(odd) {
+          background: #FAFAFA;
+        }
       }
     }
+  }
+  .mobile {
+    .v-tabsheet-tabcontainer-centered-tabs {
+      text-align: left;
+    }
+    .v-tabsheet-tabs-centered-tabs {
+      margin-left: 50px;
+    }
+    .v-tabsheet-tabitemcell {
+      width: 100px;
+    }
+
   }
 
   .v-button-borderless.v-button-danger {
@@ -262,5 +276,9 @@ $danger-pink: #FF5DBA;
       background: transparent;
     }
 
+  }
+
+  .[class*="input"]:focus {
+    border-color: $font-green;
   }
 }

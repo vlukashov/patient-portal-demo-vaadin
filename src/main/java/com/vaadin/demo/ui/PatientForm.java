@@ -16,7 +16,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.NativeSelect;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
@@ -59,6 +58,8 @@ public class PatientForm extends SubView {
 
     BeanBinder<Patient> bb = new BeanBinder<>(Patient.class);
 
+    boolean validating = false;
+
     public PatientForm() {
         setupButtons();
 
@@ -76,12 +77,18 @@ public class PatientForm extends SubView {
 
         bb.bindInstanceFields(this);
 
+//        bb.setValidationStatusHandler(e -> {
+//            save.setEnabled(bb.validate().isOk());
+//        });
         bb.addStatusChangeListener(e -> {
-            save.setEnabled(!e.hasValidationErrors());//bb.validate().isOk());
+            if (validating) {
+                validating = false;
+            } else {
+                validating = true;
+                save.setEnabled(bb.validate().isOk());//!e.hasValidationErrors());//bb.validate().isOk());
+            }
 //            Notification.show("Contains errors:" + e.hasValidationErrors(), Notification.Type.TRAY_NOTIFICATION);
         });
-
-        save.setEnabled(false);
 
         addTab(buildLayouts());
 
@@ -153,7 +160,13 @@ public class PatientForm extends SubView {
         greeting.setItems(p.getFirstName(), p.getMiddleName());
         medicalRecord.setReadOnly(p.getMedicalRecord() != null);
 
+        // This will skip initial call to is valid so we don't
+        // get null exceptions etc. for a new Patient.
+        validating = true;
         bb.setBean(p);
+
+        save.setEnabled(false);
+
         show();
     }
 

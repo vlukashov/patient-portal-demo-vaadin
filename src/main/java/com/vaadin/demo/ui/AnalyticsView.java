@@ -24,8 +24,6 @@ public class AnalyticsView extends MainView {
 
     private final AnalyticsService service;
 
-
-
     public AnalyticsView(AnalyticsService service) {
         this.service = service;
     }

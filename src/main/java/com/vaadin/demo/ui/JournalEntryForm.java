@@ -100,11 +100,7 @@ public class JournalEntryForm extends SubView {
 
         addTab(layout);
 
-        bb.forField(date).withConverter(localDate -> {
-            return new Date();
-        }, date -> {
-            return LocalDate.now();
-        }).bind("date");
+        bb.forField(date).withConverter(localDate -> new Date(), date -> LocalDate.now()).bind("date");
 
         bb.bindInstanceFields(this);
 

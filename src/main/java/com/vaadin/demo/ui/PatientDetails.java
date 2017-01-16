@@ -49,9 +49,7 @@ public class PatientDetails extends SubView {
     @Autowired
     JournalEntryForm journalEntryForm;
 
-    Button editBtn = new Button("Edit Patient");
-    Button addBtn = new Button("New Entry", FontAwesome.PLUS);
-    Button back = new Button("All Patients", FontAwesome.ARROW_LEFT);
+    Button editBtn, addBtn, back;
 
     // Added last so we don't build the views again for no reason.
     private Patient patient, lastJournalPatient, lastProfilePatient;
@@ -59,30 +57,41 @@ public class PatientDetails extends SubView {
     public PatientDetails() {
         getTabsheet().addSelectedTabChangeListener(event -> populate());
 
+        initTabs();
+        initButtons();
+
+        addTab(profile);
+        addTab(journal);
+
+        setTopRightComponent(editBtn);
+        setTopLeftComponent(back);
+
+    }
+
+    private void initTabs() {
         profile.setCaption("Profile");
         profile.addStyleName("content-layout");
         profile.setWidth("100%");
-        addTab(profile);
 
         journal.setCaption("Journal");
         journal.addStyleName("content-layout");
         journal.setWidth("100%");
-        addTab(journal);
+    }
 
+    private void initButtons() {
+        editBtn = new Button("Edit Patient");
         editBtn.addClickListener(e -> edit());
         editBtn.addStyleName(ValoTheme.BUTTON_BORDERLESS);
         editBtn.addStyleName("uppercase");
 
-        setTopRightComponent(editBtn);
-
+        addBtn = new Button("New Entry", FontAwesome.PLUS);
         addBtn.addClickListener(e -> addJournal());
         addBtn.addStyleName("addButton");
 
+        back = new Button("All Patients", FontAwesome.ARROW_LEFT);
         back.addClickListener(e -> close());
         back.addStyleName(ValoTheme.BUTTON_BORDERLESS);
         back.addStyleName("uppercase");
-        setTopLeftComponent(back);
-
     }
 
     @Override
@@ -106,6 +115,17 @@ public class PatientDetails extends SubView {
         if (patient == null) {
             return;
         }
+        updateLayoutStyles();
+
+        Component selectedTab = getTabsheet().getSelectedTab();
+        if (selectedTab.equals(profile)) {
+            populateProfile();
+        } else {
+            populateJournal();
+        }
+    }
+
+    private void updateLayoutStyles() {
         if (((VaadinUI) UI.getCurrent()).getLayoutMode().equals(LayoutMode.DESKTOP)) {
             profile.removeStyleName("mobile-profile");
             journal.removeStyleName("mobile-journal");
@@ -116,13 +136,6 @@ public class PatientDetails extends SubView {
             journal.addStyleName("mobile-journal");
             addStyleName("mobile");
             back.setCaption(null);
-        }
-
-        Component selectedTab = getTabsheet().getSelectedTab();
-        if (selectedTab.equals(profile)) {
-            populateProfile();
-        } else {
-            populateJournal();
         }
     }
 
@@ -148,6 +161,7 @@ public class PatientDetails extends SubView {
         fl.addComponent(createLabel("Date of birth", patient.getBirthDate() == null ? "" : SimpleDateFormat.getDateInstance().format(patient.getBirthDate())));
         fl.addComponent(createLabel("Snn", patient.getSsn()));
         Label label = createLabel("Patient ID", patient.getId());
+        // Add some height to get a small empty space in the form between Patient Id and Doctor
         label.setHeight("60px");
         fl.addComponent(label);
         fl.addComponent(createLabel("Doctor", patient.getDoctor()));
@@ -158,6 +172,7 @@ public class PatientDetails extends SubView {
             profile.addComponent(nameLayout);
         }
 
+        // If we have a patient and can build the patient image url then add image.
         if (patient != null && patient.getGender() != null && patient.getId() != null) {
             Image image = new Image(null, new ExternalResource(getRandomImageUrl()));
 
@@ -170,15 +185,15 @@ public class PatientDetails extends SubView {
 
                 profile.addComponent(infoLayout);
             } else {
-                profile.addComponent(image);
-                profile.addComponent(nameLayout);
-                profile.addComponent(fl);
+                profile.addComponents(image, nameLayout, fl);
             }
         } else {
             profile.addComponent(fl);
         }
         lastProfilePatient = patient;
     }
+
+    private Grid<JournalEntry> journalEntryGrid;
 
     private void populateJournal() {
         if (patient.equals(lastJournalPatient)) {
@@ -193,33 +208,14 @@ public class PatientDetails extends SubView {
             header.setWidth("100%");
             header.setComponentAlignment(patientName, Alignment.MIDDLE_LEFT);
             header.setComponentAlignment(addBtn, Alignment.MIDDLE_RIGHT);
-            journal.addComponent(header);
 
-            Grid<JournalEntry> journalEntryGrid = new Grid<>();
-            journalEntryGrid.addStyleName("open-close-selection");
-            journalEntryGrid.addColumn(j -> SimpleDateFormat.getDateInstance().format(j.getDate())).setCaption("Date");
-            journalEntryGrid.addColumn(j -> j.getAppointmentType().toString()).setCaption("Appointment");
-            journalEntryGrid.addColumn(j -> j.getDoctor().toString()).setCaption("Doctor").setExpandRatio(1);
-            journalEntryGrid.addColumn(JournalEntry::getEntry).setCaption("Notes").setExpandRatio(1).setMaximumWidth(400); // TODO how to set expand ratio + overflow or set relative width??
-
-            journalEntryGrid.setDetailsGenerator(j -> {
-                Label l = new Label(j.getEntry());
-                l.setWidth("100%");
-                l.setCaption("NOTES");
-                VerticalLayout vl = new VerticalLayout(l);
-                vl.setMargin(true);
-                return vl;
-            });
-
-
-            journalEntryGrid.addItemClickListener(e -> {
-                journalEntryGrid.setDetailsVisible(e.getItem(), !journalEntryGrid.isDetailsVisible(e.getItem()));
-            });
+            if (journalEntryGrid == null) {
+                initJournalEntryGrid();
+            }
 
             journalEntryGrid.setItems(patient.getJournalEntries());
 
-            journalEntryGrid.setWidth("100%");
-
+            journal.addComponent(header);
             journal.addComponent(journalEntryGrid);
         } else {
             journal.addComponent(addBtn);
@@ -229,6 +225,32 @@ public class PatientDetails extends SubView {
         }
 
         lastJournalPatient = patient;
+    }
+
+    private void initJournalEntryGrid() {
+        journalEntryGrid = new Grid<>();
+        journalEntryGrid.addStyleName("open-close-selection");
+        journalEntryGrid.addColumn(j -> SimpleDateFormat.getDateInstance().format(j.getDate())).setCaption("Date");
+        journalEntryGrid.addColumn(j -> j.getAppointmentType().toString()).setCaption("Appointment");
+        journalEntryGrid.addColumn(j -> j.getDoctor().toString()).setCaption("Doctor").setExpandRatio(1);
+        journalEntryGrid.addColumn(JournalEntry::getEntry).setCaption("Notes").setExpandRatio(1).setMaximumWidth(400);
+
+        journalEntryGrid.setDetailsGenerator(j -> {
+            Label l = new Label(j.getEntry());
+            l.setWidth("100%");
+            l.setCaption("NOTES");
+            VerticalLayout vl = new VerticalLayout(l);
+            vl.setMargin(true);
+            return vl;
+        });
+
+
+        journalEntryGrid.addItemClickListener(e -> {
+            journalEntryGrid.setDetailsVisible(e.getItem(), !journalEntryGrid.isDetailsVisible(e.getItem()));
+        });
+
+
+        journalEntryGrid.setWidth("100%");
     }
 
     private Label getNameLabel(String content, String caption) {
@@ -255,6 +277,11 @@ public class PatientDetails extends SubView {
         form.editPatient(patient);
     }
 
+    /**
+     * Generate a url to get a user image from teh randomuser.me API
+     *
+     * @return Image url for random user image.
+     */
     public String getRandomImageUrl() {
         StringBuilder sb = new StringBuilder();
         sb.append("https://randomuser.me/api/portraits/");

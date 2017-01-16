@@ -15,12 +15,15 @@ import com.vaadin.ui.themes.ValoTheme;
  * Created by mstahv
  */
 abstract class MobileRow extends VerticalLayout {
+
     protected final HorizontalLayout header;
-    private Button selectBtn = new Button(FontAwesome.ARROW_RIGHT);//.withStyleName(ValoTheme.BUTTON_BORDERLESS, ValoTheme.BUTTON_ICON_ONLY);
+
+    private Button selectBtn = new Button(FontAwesome.ARROW_RIGHT);
     private Label carret = new Label();
     protected Label title = new Label();
     protected Label desc = new Label();
     private FormLayout details = new FormLayout();
+
     private boolean detailsExpanded = false;
 
     public MobileRow(String titleStr, String descStr) {
@@ -30,7 +33,8 @@ abstract class MobileRow extends VerticalLayout {
         selectBtn.addStyleName(ValoTheme.BUTTON_BORDERLESS);
         selectBtn.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
 
-        header = new HorizontalLayout(carret, title, desc, selectBtn);//.alignAll(Alignment.MIDDLE_LEFT).expand(title);
+        header = new HorizontalLayout(carret, title, desc, selectBtn);
+        // Align all or set default alignment would be nice to have
         header.setComponentAlignment(carret, Alignment.MIDDLE_LEFT);
         header.setComponentAlignment(title, Alignment.MIDDLE_LEFT);
         header.setComponentAlignment(desc, Alignment.MIDDLE_LEFT);
@@ -39,6 +43,8 @@ abstract class MobileRow extends VerticalLayout {
         header.setExpandRatio(title, 1);
         addComponent(header);
 
+        // Set icon sets the icon into the caption also for label so
+        // we need to use the combination ContentMode.HTML + Icon.getHtml()
         carret.setContentMode(ContentMode.HTML);
         carret.setValue(FontAwesome.CARET_RIGHT.getHtml());
 

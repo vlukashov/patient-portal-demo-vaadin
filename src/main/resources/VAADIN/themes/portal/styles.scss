@@ -280,8 +280,7 @@ $danger-pink: #FF5DBA;
 
   }
 
-  .[ class
-*= "input" ]:focus {
-  border-color: $font-green;
-}
+  [class*="input"]:focus {
+    border-color: $font-green;
+  }
 }

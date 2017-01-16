@@ -7,10 +7,9 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.UI;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.LinkedList;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringUI
 @Theme("portal")
@@ -28,6 +27,8 @@ public class VaadinUI extends UI {
 
     private LinkedList<SubView> subviews = new LinkedList();
 
+    LayoutMode current;
+
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         tabsheet = new TabSheet();
@@ -36,12 +37,24 @@ public class VaadinUI extends UI {
         tabsheet.addComponents(patientView);
         tabsheet.addComponent(analyticsView);
 
-        tabsheet.addSelectedTabChangeListener(e->closeAllSubViews());
+        tabsheet.addSelectedTabChangeListener(e -> closeAllSubViews());
 
         layout.addComponent(tabsheet);
         setContent(layout);
 
-        setResponsive(true);
+        current = getLayoutMode();
+
+        Page.getCurrent().addBrowserWindowResizeListener(resize -> {
+            LayoutMode layoutMode = getLayoutMode();
+            if (!layoutMode.equals(current)) {
+                ((MainView) tabsheet.getSelectedTab()).repaint();
+                subviews.forEach(subView -> {
+                    updateWidths(subView);
+                    subView.repaint();
+                });
+                current = layoutMode;
+            }
+        });
     }
 
     public void showSubView(SubView subView) {
@@ -56,17 +69,24 @@ public class VaadinUI extends UI {
     }
 
     private void makeSubViewVisible(SubView subView) {
-        if(getLayoutMode() == LayoutMode.HANDHELD) {
+        updateWidths(subView);
+        layout.addComponent(subView, "top:0;right:0;z-index:5;"); // magic number 5 ;-)
+    }
+
+    private void updateWidths(SubView subView) {
+        if (getLayoutMode() == LayoutMode.HANDHELD) {
+            // Note!! There is a bug when opening the subView in mobile 100% and moving to desktop version
+            // that makes AbstractLayout leave a left: 0; into the css and the sub window is thus in the wrong position.
             subView.setWidth("100%");
         } else {
             subView.setWidth("960px");
         }
-        layout.addComponent(subView, "top:0;bottom:0;right:0;z-index:5;"); // magic number 5 ;-)
     }
 
     public void closeSubView(SubView subView) {
         closeSubView(subView, true);
     }
+
     public void closeSubView(SubView subView, boolean informMainPanel) {
         if (subviews.contains(subView)) {
             // close also sub-sub views
@@ -76,8 +96,8 @@ public class VaadinUI extends UI {
             if (!subviews.isEmpty()) {
                 makeSubViewVisible(subviews.getFirst());
             }
-            if(informMainPanel)
-            ((MainView)tabsheet.getSelectedTab()).subViewClose();
+            if (informMainPanel)
+                ((MainView) tabsheet.getSelectedTab()).subViewClose();
         }
     }
 

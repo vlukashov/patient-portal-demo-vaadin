@@ -85,6 +85,11 @@ public class PatientDetails extends SubView {
 
     }
 
+    @Override
+    public void repaint() {
+        showPatient(patient);
+    }
+
     void showPatient(Patient p) {
         if (p.isPersistent()) {
             p = patientService.findAttached(p); // fetch with joins to history etc

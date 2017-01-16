@@ -162,6 +162,11 @@ public class PatientForm extends SubView {
         ((VaadinUI) getUI()).closeSubView(this, false);
     }
 
+    @Override
+    public void repaint() {
+        // NOOP
+    }
+
     private void deletePatient(Patient patient) {
 
         Window window = new Window();

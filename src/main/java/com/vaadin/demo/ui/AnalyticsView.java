@@ -97,4 +97,9 @@ public class AnalyticsView extends MainView {
     public void subViewClose() {
         // NOOP
     }
+
+    @Override
+    public void repaint() {
+        // NOOP
+    }
 }

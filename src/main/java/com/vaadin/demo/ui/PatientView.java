@@ -50,6 +50,10 @@ public class PatientView extends MainView {
     public void attach() {
         super.attach();
 
+        buildLayout();
+    }
+
+    private void buildLayout() {
         if (((VaadinUI) UI.getCurrent()).getLayoutMode() == LayoutMode.DESKTOP) {
 
             patients = new Grid<>();
@@ -115,5 +119,11 @@ public class PatientView extends MainView {
     public void subViewClose() {
         if (patients != null)
             patients.getSelectionModel().deselectAll();
+    }
+
+    @Override
+    public void repaint() {
+        removeAllComponents();
+        buildLayout();
     }
 }

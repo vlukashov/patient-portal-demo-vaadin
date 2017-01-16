@@ -78,4 +78,5 @@ public abstract class SubView extends AbsoluteLayout {
         ((VaadinUI) getUI()).closeSubView(this);
     }
 
+    public abstract void repaint();
 }

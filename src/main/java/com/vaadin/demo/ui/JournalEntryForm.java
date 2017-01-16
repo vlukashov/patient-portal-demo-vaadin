@@ -158,4 +158,9 @@ public class JournalEntryForm extends SubView {
     public void close() {
         ((VaadinUI) getUI()).closeSubView(this, false);
     }
+
+    @Override
+    public void repaint() {
+        //NOOP
+    }
 }

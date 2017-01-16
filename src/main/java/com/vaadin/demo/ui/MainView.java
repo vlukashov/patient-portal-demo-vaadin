@@ -19,4 +19,6 @@ public abstract class MainView extends VerticalLayout implements View {
     }
 
     public abstract void subViewClose();
+
+    public abstract void repaint();
 }

@@ -57,7 +57,7 @@ public class MobilePatientListing extends MobileListing<Patient> {
         );
         for (Patient p : list.getContent()) {
             MobilePatientRow r = new MobilePatientRow(p, this);
-            r.getSelectBtn().addClickListener(e -> focusPatient(p));
+            r.addSelectClickListener(e -> focusPatient(p));
             if (getSortProperty().startsWith("doctor")) {
                 r.showDetail("Doctor", p.getDoctor().toString());
             }

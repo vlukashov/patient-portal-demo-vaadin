@@ -18,7 +18,7 @@ abstract class MobileRow extends VerticalLayout {
 
     protected final HorizontalLayout header;
 
-    private Button selectBtn = new Button(FontAwesome.ARROW_RIGHT);
+    private Button selectBtn;
     private Label carret = new Label();
     protected Label title = new Label();
     protected Label desc = new Label();
@@ -30,10 +30,7 @@ abstract class MobileRow extends VerticalLayout {
         super();
         setMargin(false);
 
-        selectBtn.addStyleName(ValoTheme.BUTTON_BORDERLESS);
-        selectBtn.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
-
-        header = new HorizontalLayout(carret, title, desc, selectBtn);
+        header = new HorizontalLayout(carret, title, desc);
         // Align all or set default alignment would be nice to have
         header.setComponentAlignment(carret, Alignment.MIDDLE_LEFT);
         header.setComponentAlignment(title, Alignment.MIDDLE_LEFT);
@@ -65,12 +62,13 @@ abstract class MobileRow extends VerticalLayout {
         });
     }
 
-    public void setSelectVisible(boolean visible) {
-        selectBtn.setVisible(visible);
-    }
+    public void addSelectClickListener(Button.ClickListener listener) {
+        selectBtn = new Button(FontAwesome.ARROW_RIGHT);
+        selectBtn.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+        selectBtn.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
 
-    public Button getSelectBtn() {
-        return selectBtn;
+        header.addComponent(selectBtn);
+        selectBtn.addClickListener(listener);
     }
 
     public HorizontalLayout getHeader() {

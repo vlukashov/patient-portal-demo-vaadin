@@ -16,13 +16,13 @@ public class MobileJournalRow extends MobileRow {
     VerticalLayout details = new VerticalLayout();
 
     public MobileJournalRow(JournalEntry journal) {
-        super(SimpleDateFormat.getDateInstance().format(journal.getDate()) + "\nDOCTOR", journal.getAppointmentType().toString() + "\n" + journal.getDoctor());
+        super(SimpleDateFormat.getDateInstance().format(journal.getDate()) + "\nDOCTOR",
+                journal.getAppointmentType().toString() + "\n" + journal.getDoctor());
         this.journal = journal;
         header.setMargin(false);
         title.setContentMode(ContentMode.PREFORMATTED);
         desc.setContentMode(ContentMode.PREFORMATTED);
 
-        setSelectVisible(false);
         setSpacing(false);
 
         details.setWidth("100%");

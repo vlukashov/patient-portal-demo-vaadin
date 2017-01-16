@@ -19,6 +19,7 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -41,7 +42,7 @@ public class PatientDetails extends SubView {
     PatientService patientService;
 
     CssLayout profile = new CssLayout();
-    CssLayout journal = new CssLayout();
+    VerticalLayout journal = new VerticalLayout();
 
     @Autowired
     PatientForm form = new PatientForm();
@@ -75,7 +76,7 @@ public class PatientDetails extends SubView {
 
         journal.setCaption("Journal");
         journal.addStyleName("content-layout");
-        journal.setWidth("100%");
+        journal.setSizeFull();
     }
 
     private void initButtons() {
@@ -217,11 +218,19 @@ public class PatientDetails extends SubView {
 
             journal.addComponent(header);
             journal.addComponent(journalEntryGrid);
+            journal.setExpandRatio(journalEntryGrid, 1f);
         } else {
             journal.addComponent(addBtn);
             journal.addComponent(patientName);
 
-            patient.getJournalEntries().forEach(journalEntry -> journal.addComponent(new MobileJournalRow(journalEntry)));
+            VerticalLayout panelContent = new VerticalLayout();
+            Panel journalEntriesPanel = new Panel(panelContent);
+            journalEntriesPanel.setSizeFull();
+
+            patient.getJournalEntries().forEach(journalEntry -> panelContent.addComponent(new MobileJournalRow(journalEntry)));
+
+            journal.addComponent(journalEntriesPanel);
+            journal.setExpandRatio(journalEntriesPanel, 1f);
         }
 
         lastJournalPatient = patient;
@@ -244,6 +253,7 @@ public class PatientDetails extends SubView {
             return vl;
         });
 
+        journalEntryGrid.setHeight(100, Unit.PERCENTAGE);
 
         journalEntryGrid.addItemClickListener(e -> {
             journalEntryGrid.setDetailsVisible(e.getItem(), !journalEntryGrid.isDetailsVisible(e.getItem()));

@@ -114,7 +114,13 @@ public class PatientForm extends SubView {
         cancel = new Button("Cancel");
         cancel.addStyleName(ValoTheme.BUTTON_BORDERLESS);
         cancel.addStyleName("uppercase");
-        cancel.addClickListener(e -> ((VaadinUI) getUI()).closeAllSubViews());
+        cancel.addClickListener(e -> {
+            if(bb.getBean().isPersistent()){
+                close();
+            }else {
+                ((VaadinUI) getUI()).closeAllSubViews();
+            }
+        });
 
         delete = new Button("Delete", e -> deletePatient(bb.getBean()));
         delete.addStyleName(ValoTheme.BUTTON_BORDERLESS);

@@ -53,7 +53,7 @@ public class JournalEntryForm extends SubView {
 
     private Label patient = new Label();
     private DateField date = new DateField("Date");
-    private ComboBox<AppointmentType> type = new ComboBox<>("Appointment");
+    private ComboBox<AppointmentType> appointmentType = new ComboBox<>("Appointment");
     private ComboBox<Doctor> doctor = new ComboBox<>("Doctor");
     private TextArea entry = new TextArea();
 
@@ -67,7 +67,7 @@ public class JournalEntryForm extends SubView {
 
         patient.setCaption("Patient");
 
-        FormLayout formlayout = new FormLayout(patient, date, type, doctor);
+        FormLayout formlayout = new FormLayout(patient, date, appointmentType, doctor);
         formlayout.setMargin(true);
         formlayout.setWidthUndefined();
         formlayout.addStyleName("data-edit-layout");
@@ -78,7 +78,7 @@ public class JournalEntryForm extends SubView {
         buttonLayout.setSpacing(true);
         buttonLayout.addStyleName("buttons");
 
-        type.setItems(AppointmentType.values());
+        appointmentType.setItems(AppointmentType.values());
         doctor.setItems(doctorRepository.findAll());
 
         entry.setWidth("100%");

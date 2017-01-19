@@ -283,4 +283,18 @@ $danger-pink: #FF5DBA;
   [class*="input"]:focus {
     border-color: $font-green;
   }
+
+  .logout-button {
+    color: #fff;
+    text-transform: uppercase;
+    box-shadow: none;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+
+    &:hover {
+      color: #ddd;
+      background: #747C81;
+    }
+  }
 }

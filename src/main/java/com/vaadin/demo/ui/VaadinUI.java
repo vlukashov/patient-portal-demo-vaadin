@@ -1,12 +1,15 @@
 package com.vaadin.demo.ui;
 
 import com.vaadin.annotations.Theme;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.AbsoluteLayout;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.LinkedList;
@@ -28,6 +31,7 @@ public class VaadinUI extends UI {
     private LinkedList<SubView> subviews = new LinkedList();
 
     private LayoutMode lastRenderMode;
+    private Button logout;
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -43,6 +47,14 @@ public class VaadinUI extends UI {
         setContent(layout);
 
         lastRenderMode = getLayoutMode();
+
+        logout = new Button("Logout", clickEvent -> {
+           Page.getCurrent().setLocation("/logout");
+        });
+        logout.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+        logout.addStyleName("logout-button");
+        logout.setIcon(FontAwesome.SIGN_OUT);
+        layout.addComponent(logout, "top:0;right:0");
 
         // Add a resize listener so we can check if we need to redraw in a new mode
         Page.getCurrent().addBrowserWindowResizeListener(resize -> {

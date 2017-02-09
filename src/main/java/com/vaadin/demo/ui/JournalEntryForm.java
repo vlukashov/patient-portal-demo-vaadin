@@ -2,25 +2,13 @@ package com.vaadin.demo.ui;
 
 import com.vaadin.data.BeanBinder;
 import com.vaadin.data.HasValue;
-import com.vaadin.demo.entities.AppointmentType;
-import com.vaadin.demo.entities.Doctor;
-import com.vaadin.demo.entities.JournalEntry;
-import com.vaadin.demo.entities.Patient;
+import com.vaadin.demo.entities.*;
 import com.vaadin.demo.repositories.DoctorRepository;
 import com.vaadin.demo.repositories.PatientRepository;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.DateField;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TextArea;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -30,9 +18,6 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.Iterator;
 
-/**
- * Created by mstahv
- */
 @SpringComponent
 @UIScope
 public class JournalEntryForm extends SubView {

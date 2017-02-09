@@ -2,7 +2,6 @@ package com.vaadin.demo.ui;
 
 import com.vaadin.addon.charts.Chart;
 import com.vaadin.addon.charts.model.*;
-import com.vaadin.demo.repositories.PatientRepository;
 import com.vaadin.demo.service.AnalyticsService;
 import com.vaadin.demo.service.StringLongPair;
 import com.vaadin.spring.annotation.SpringComponent;
@@ -15,9 +14,6 @@ import java.util.Comparator;
 import java.util.List;
 
 
-/**
- * Created by mstahv
- */
 @SpringComponent
 @UIScope
 public class AnalyticsView extends MainView {

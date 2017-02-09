@@ -6,11 +6,7 @@ import com.vaadin.demo.ui.mobile.MobilePatientListing;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
@@ -18,9 +14,6 @@ import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
 
 
-/**
- * Created by mstahv
- */
 @SpringComponent
 @UIScope
 public class PatientView extends MainView {

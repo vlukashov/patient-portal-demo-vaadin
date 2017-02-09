@@ -1,15 +1,8 @@
 package com.vaadin.demo.ui;
 
-import com.vaadin.ui.AbsoluteLayout;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.TabSheet;
-import com.vaadin.ui.UI;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
-/**
- * Created by mstahv
- */
 public abstract class SubView extends AbsoluteLayout {
 
     private final TabSheet tabSheet = new TabSheet();

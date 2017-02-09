@@ -22,7 +22,7 @@ public class VaadinPatientPortalApplication {
 
     @Bean
     CommandLineRunner init(DBInitService service) {
-        return (String... strings) -> service.initDatabase();
+        return strings -> service.initDatabase();
     }
 
     @Configuration

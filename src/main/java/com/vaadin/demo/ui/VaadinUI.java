@@ -1,6 +1,7 @@
 package com.vaadin.demo.ui;
 
 import com.vaadin.annotations.Theme;
+import com.vaadin.demo.LoginView;
 import com.vaadin.server.*;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
@@ -11,7 +12,7 @@ import java.util.LinkedList;
 
 @SpringUI
 @Theme("portal")
-public class VaadinUI extends UI {
+public class VaadinUI extends UI implements LoginView.LoginSuccessListener {
 
 
     @Autowired
@@ -28,8 +29,19 @@ public class VaadinUI extends UI {
     private LayoutMode lastRenderMode;
     private Button logout;
 
+    private boolean loggedIn = false;
+
     @Override
     protected void init(VaadinRequest vaadinRequest) {
+
+        if(loggedIn){
+            buildMainLayout();
+        } else {
+            setContent(showLoginView());
+        }
+    }
+
+    private void buildMainLayout() {
         tabsheet = new TabSheet();
         tabsheet.addStyleName("main");
         tabsheet.setSizeFull();
@@ -44,7 +56,8 @@ public class VaadinUI extends UI {
         lastRenderMode = getLayoutMode();
 
         logout = new Button("Logout", clickEvent -> {
-           Page.getCurrent().setLocation("/logout");
+           loggedIn = false;
+           setContent(showLoginView());
         });
         logout.addStyleName(ValoTheme.BUTTON_BORDERLESS);
         logout.addStyleName("logout-button");
@@ -63,6 +76,10 @@ public class VaadinUI extends UI {
                 lastRenderMode = layoutMode;
             }
         });
+    }
+
+    private LoginView showLoginView() {
+        return new LoginView(this);
     }
 
     public void showSubView(SubView subView) {
@@ -135,5 +152,11 @@ public class VaadinUI extends UI {
         } else {
             return LayoutMode.DESKTOP;
         }
+    }
+
+    @Override
+    public void loginSuccessful() {
+        loggedIn = true;
+        buildMainLayout();
     }
 }

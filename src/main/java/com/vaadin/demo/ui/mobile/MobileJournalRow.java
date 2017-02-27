@@ -1,7 +1,7 @@
 package com.vaadin.demo.ui.mobile;
 
 import com.vaadin.demo.entities.JournalEntry;
-import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 

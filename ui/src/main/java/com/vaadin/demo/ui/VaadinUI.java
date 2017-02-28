@@ -1,7 +1,7 @@
 package com.vaadin.demo.ui;
 
 import com.vaadin.annotations.Theme;
-import com.vaadin.demo.LoginView;
+import com.vaadin.annotations.Widgetset;
 import com.vaadin.server.*;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
@@ -12,6 +12,7 @@ import java.util.LinkedList;
 
 @SpringUI
 @Theme("portal")
+@Widgetset("com.vaadin.demo.ui.PatientPortalWidgetSet")
 public class VaadinUI extends UI implements LoginView.LoginSuccessListener {
 
 

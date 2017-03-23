@@ -21,7 +21,7 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-charts</artifactId>
-            <version>4.0.0-beta1</version>
+            <version>${vaadin-charts-version}</version>
             <type>jar</type>
         </dependency>
     </dependencies>

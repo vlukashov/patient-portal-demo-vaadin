@@ -36,8 +36,7 @@ public class AnalyticsView extends MainView {
         tabSheet.addTab(getGenderChart(), "Gender");
         tabSheet.addTab(getDoctorChart(), "Doctor");
 
-        addComponent(tabSheet);
-        setExpandRatio(tabSheet, 1);
+        addComponentsAndExpand(tabSheet);
     }
 
     private Layout getAgeChart() {
@@ -52,9 +51,7 @@ public class AnalyticsView extends MainView {
         chart.getConfiguration().addSeries(ds);
         chart.getConfiguration().getxAxis().setType(AxisType.CATEGORY);
 
-        VerticalLayout vl = new VerticalLayout(chart);
-        vl.setMargin(true);
-        return vl;
+        return new VerticalLayout(chart);
     }
 
     private Layout getGenderChart() {
@@ -67,9 +64,7 @@ public class AnalyticsView extends MainView {
         chart.getConfiguration().addSeries(ds);
         chart.getConfiguration().getxAxis().setType(AxisType.CATEGORY);
 
-        VerticalLayout vl = new VerticalLayout(chart);
-        vl.setMargin(true);
-        return vl;
+        return new VerticalLayout(chart);
     }
 
     private Layout getDoctorChart() {
@@ -82,9 +77,7 @@ public class AnalyticsView extends MainView {
         chart.getConfiguration().addSeries(ds);
         chart.getConfiguration().getxAxis().setType(AxisType.CATEGORY);
 
-        VerticalLayout vl = new VerticalLayout(chart);
-        vl.setMargin(true);
-        return vl;
+        return new VerticalLayout(chart);
     }
 
     @Override

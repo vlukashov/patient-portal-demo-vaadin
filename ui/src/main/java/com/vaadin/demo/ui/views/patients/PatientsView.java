@@ -38,20 +38,17 @@ public class PatientsView extends VerticalLayout implements View {
         patientsGrid.setSizeFull();
 
         patientsGrid.removeAllColumns();
-        patientsGrid.addColumn(patient -> patient.getFirstName() + " " + patient.getLastName()).setId("name").setCaption("Name");
+        patientsGrid.addColumn(patient -> patient.getLastName() + ", " + patient.getFirstName()).setId("lastName").setCaption("Name");
         patientsGrid.addColumn(patient -> patient.getId().toString()).setId("id").setCaption("Id");
         patientsGrid.addColumn(patient -> patient.getMedicalRecord().toString()).setId("medicalRecord").setCaption("Medical record");
-        patientsGrid.addColumn(patient -> patient.getDoctor().getFirstName() + " " + patient.getDoctor().getLastName()).setId("doctor").setCaption("Doctor");
+        patientsGrid.addColumn(patient -> patient.getDoctor().getLastName() + ", " + patient.getDoctor().getFirstName()).setId("doctor.lastName").setCaption("Doctor");
         patientsGrid.addColumn(patient ->
                 patient.getLastVisit() == null ? "" : SimpleDateFormat.getDateInstance().format(patient.getLastVisit())
         ).setId("lastVisit").setCaption("Last visit");
 
-//        patientsGrid.setItems(repo.findAll());
         patientsGrid.setDataProvider(
                 (sortOrder, offset, limit) -> {
-                    int page = offset / limit;
-                    Sort sorts = getSorts(sortOrder);
-                    List<Patient> content = repo.findAll(new PageRequest(page, limit, sorts)).getContent();
+                    List<Patient> content = repo.findAll(new PageRequest(offset / limit, limit, getSorts(sortOrder))).getContent();
                     return content.stream();
                 },
                 () -> (int) repo.count());
@@ -60,12 +57,13 @@ public class PatientsView extends VerticalLayout implements View {
     }
 
     private Sort getSorts(List<QuerySortOrder> sortOrders) {
-        if(sortOrders.isEmpty()){
+        if (sortOrders.isEmpty()) {
             return new Sort(new Sort.Order(Sort.Direction.DESC, "lastName"));
         } else {
             return new Sort(sortOrders.stream().map(sortOrder -> {
                 Sort.Direction dir = sortOrder.getDirection().equals(SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC;
-                return new Sort.Order(dir, sortOrder.getSorted());
+                String sortProperty = sortOrder.getSorted();
+                return new Sort.Order(dir, sortProperty);
             }).collect(Collectors.toList()));
         }
     }

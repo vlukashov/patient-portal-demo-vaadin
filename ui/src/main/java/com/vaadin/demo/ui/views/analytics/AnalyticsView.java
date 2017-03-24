@@ -12,7 +12,6 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
@@ -51,49 +50,29 @@ public class AnalyticsView extends VerticalLayout implements View {
     }
 
     private Layout getAgeChart() {
-        Chart chart = new Chart(ChartType.COLUMN);
-        chart.getConfiguration().setTitle("Patients bt Age");
-        DataSeries ds = new DataSeries();
         List<StringLongPair> data = service.getStatsByAge();
-
         data.sort(Comparator.comparing(StringLongPair::getGroup));
 
-        data.forEach(d -> ds.add(new DataSeriesItem(d.getGroup(), d.getCount())));
-        chart.getConfiguration().addSeries(ds);
-        chart.getConfiguration().getxAxis().setType(AxisType.CATEGORY);
-
-        VerticalLayout vl = new VerticalLayout(chart);
-        vl.setMargin(true);
-        return vl;
+        return getChart("Patients bt Age", data);
     }
 
     private Layout getGenderChart() {
-        Chart chart = new Chart(ChartType.COLUMN);
-        chart.getConfiguration().setTitle("Gender");
-        DataSeries ds = new DataSeries();
-
-        List<StringLongPair> data = service.getStatsByGender();
-        data.forEach(d -> ds.add(new DataSeriesItem(d.getGroup(), d.getCount())));
-        chart.getConfiguration().addSeries(ds);
-        chart.getConfiguration().getxAxis().setType(AxisType.CATEGORY);
-
-        VerticalLayout vl = new VerticalLayout(chart);
-        vl.setMargin(true);
-        return vl;
+        return getChart("Gender", service.getStatsByGender());
     }
 
     private Layout getDoctorChart() {
-        Chart chart = new Chart(ChartType.COLUMN);
-        chart.getConfiguration().setTitle("Avg. Patient age by Doctor");
-        DataSeries ds = new DataSeries();
 
-        List<StringLongPair> data = service.getStatsByDoctor();
+        return getChart("Avg. Patient age by Doctor", service.getStatsByDoctor());
+    }
+
+    private Layout getChart(String title,  List<StringLongPair> data) {
+        Chart chart = new Chart(ChartType.COLUMN);
+        chart.getConfiguration().setTitle(title);
+        DataSeries ds = new DataSeries();
         data.forEach(d -> ds.add(new DataSeriesItem(d.getGroup(), d.getCount())));
         chart.getConfiguration().addSeries(ds);
         chart.getConfiguration().getxAxis().setType(AxisType.CATEGORY);
 
-        VerticalLayout vl = new VerticalLayout(chart);
-        vl.setMargin(true);
-        return vl;
+        return new VerticalLayout(chart);
     }
 }

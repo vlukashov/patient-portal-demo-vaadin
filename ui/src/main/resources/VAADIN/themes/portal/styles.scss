@@ -76,6 +76,32 @@ $danger-pink: #FF5DBA;
     }
   }
 
+  .patient-details-view {
+    display: none;
+    position: absolute;
+    z-index: 5;
+    left: 25%;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: #fff;
+    border-left: 5px solid #434D54;
+    box-shadow: 2px 2px 10px 8px rgba(0, 0, 0, 0.2);
+
+    &.open {
+      display: block;
+
+    }
+  }
+  @media (max-width: 600px) {
+    .patient-details-view.open {
+      left: 0;
+      box-shadow: none;
+      border: none;
+    }
+  }
+
+
   .main {
 
 

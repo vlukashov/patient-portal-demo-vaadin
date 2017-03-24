@@ -9,8 +9,8 @@ import com.vaadin.server.Page;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -21,21 +21,39 @@ import java.util.stream.Collectors;
 
 @SpringComponent
 @SpringView(name = "patients")
-public class PatientsView extends VerticalLayout implements View {
+public class PatientsView extends CssLayout implements View {
 
     @Autowired
-    PatientRepository repo;
+    private PatientRepository repo;
+
+    @Autowired
+    private PatientDetailsView detailsView;
+
+    @Autowired
+    private PatientSubject patientSubject;
+
+    private Grid<Patient> patientsGrid;
+
+    public PatientsView() {
+        addStyleName("patients-view");
+    }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         Page.getCurrent().setTitle("Patients");
         setSizeFull();
         buildLayout();
+
+        detailsView.init();
+        addComponent(detailsView);
+
+        patientSubject.get().subscribe(p -> p.ifPresent(patient -> patientsGrid.select(patient)));
     }
 
     private void buildLayout() {
-        Grid<Patient> patientsGrid = new Grid<>(Patient.class);
+        patientsGrid = new Grid<>(Patient.class);
         patientsGrid.setSizeFull();
+        patientsGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
         patientsGrid.removeAllColumns();
         patientsGrid.addColumn(patient -> patient.getLastName() + ", " + patient.getFirstName()).setId("lastName").setCaption("Name");
@@ -46,15 +64,22 @@ public class PatientsView extends VerticalLayout implements View {
                 patient.getLastVisit() == null ? "" : SimpleDateFormat.getDateInstance().format(patient.getLastVisit())
         ).setId("lastVisit").setCaption("Last visit");
 
-        patientsGrid.setDataProvider(
-                (sortOrder, offset, limit) -> {
-                    List<Patient> content = repo.findAll(new PageRequest(offset / limit, limit, getSorts(sortOrder))).getContent();
-                    return content.stream();
-                },
-                () -> (int) repo.count());
+        patientsGrid.setItems(repo.findAll());
+
+//        Vaadin Grid Data Provider API is a PITA
+//        patientsGrid.setDataProvider((sortOrder, offset, limit) -> {
+//            System.out.println("Getting: offset: " + offset + ", limit: " + limit + " (page: " + (offset / limit) + ")");
+//            List<Patient> content = repo.findAll(new PageRequest(offset / limit, limit, getSorts(sortOrder))).getContent();
+//            return content.stream();
+//        }, () -> (int) repo.count());
+
+        patientsGrid.addSelectionListener(e -> {
+            patientSubject.get().onNext(e.getFirstSelectedItem());
+        });
 
         addComponent(patientsGrid);
     }
+
 
     private Sort getSorts(List<QuerySortOrder> sortOrders) {
         if (sortOrders.isEmpty()) {
@@ -67,4 +92,5 @@ public class PatientsView extends VerticalLayout implements View {
             }).collect(Collectors.toList()));
         }
     }
+
 }

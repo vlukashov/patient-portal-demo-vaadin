@@ -24,15 +24,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 public class VaadinUI extends UI {
 
     @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    MainView mainView;
+    private MainView mainView;
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
 
-        if(SecurityUtils.isLoggedIn()){
+        if (SecurityUtils.isLoggedIn()) {
             showMainView();
         } else {
             showLoginView();
@@ -44,10 +44,10 @@ public class VaadinUI extends UI {
     }
 
     private void showMainView() {
-       setContent(mainView);
+        setContent(mainView);
     }
 
-    public boolean login(String username, String password) {
+    private boolean login(String username, String password) {
         try {
             Authentication token = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(username, password));

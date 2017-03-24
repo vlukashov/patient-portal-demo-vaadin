@@ -1,5 +1,7 @@
 @import "../valo/valo.scss";
 
+$v-background-color: #fff;
+
 $v-font-family: 'Ubuntu', sans-serif;
 $v-font-weight: 400;
 $v-font-color: #434D54;
@@ -48,7 +50,35 @@ $danger-pink: #FF5DBA;
     border-color: transparent;
   }
 
+  .main-nav {
+    background: #B5B9BC;
+    height: 60px;
+
+    .link {
+      font-size: 16px;
+      line-height: 60px;
+      text-transform: uppercase;
+      width: 200px;
+      text-align: center;
+      color: #fff;
+      height: 100%;
+      border: none;
+
+      &:hover {
+        color: #ddd;
+        background: #747C81;
+      }
+
+      &.active {
+        background: #fff;
+        color: #9DD22D;
+      }
+    }
+  }
+
   .main {
+
+
     .v-tabsheet-tabitemcell {
       font-size: 16px;
       line-height: 60px;

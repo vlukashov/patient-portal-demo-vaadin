@@ -1,4 +1,4 @@
-package com.vaadin.demo.ui;
+package com.vaadin.demo.ui.views;
 
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;

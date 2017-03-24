@@ -1,27 +1,38 @@
-package com.vaadin.demo.ui;
+package com.vaadin.demo.ui.views.analytics;
 
 import com.vaadin.addon.charts.Chart;
-import com.vaadin.addon.charts.model.*;
+import com.vaadin.addon.charts.model.AxisType;
+import com.vaadin.addon.charts.model.ChartType;
+import com.vaadin.addon.charts.model.DataSeries;
+import com.vaadin.addon.charts.model.DataSeriesItem;
 import com.vaadin.demo.service.AnalyticsService;
 import com.vaadin.demo.service.StringLongPair;
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.*;
+import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Layout;
+import com.vaadin.ui.TabSheet;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.util.Comparator;
 import java.util.List;
 
-
 @SpringComponent
-@UIScope
-public class AnalyticsView extends MainView {
+@SpringView
+public class AnalyticsView extends VerticalLayout implements View {
 
-    private final AnalyticsService service;
+    @Autowired
+    private AnalyticsService service;
 
-    public AnalyticsView(AnalyticsService service) {
-        this.service = service;
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent event) {
+        Page.getCurrent().setTitle("Analytics");
     }
 
     @PostConstruct
@@ -47,11 +58,13 @@ public class AnalyticsView extends MainView {
 
         data.sort(Comparator.comparing(StringLongPair::getGroup));
 
-        data.forEach(d->ds.add(new DataSeriesItem(d.getGroup(),d.getCount())));
+        data.forEach(d -> ds.add(new DataSeriesItem(d.getGroup(), d.getCount())));
         chart.getConfiguration().addSeries(ds);
         chart.getConfiguration().getxAxis().setType(AxisType.CATEGORY);
 
-        return new VerticalLayout(chart);
+        VerticalLayout vl = new VerticalLayout(chart);
+        vl.setMargin(true);
+        return vl;
     }
 
     private Layout getGenderChart() {
@@ -60,11 +73,13 @@ public class AnalyticsView extends MainView {
         DataSeries ds = new DataSeries();
 
         List<StringLongPair> data = service.getStatsByGender();
-        data.forEach(d->ds.add(new DataSeriesItem(d.getGroup(),d.getCount())));
+        data.forEach(d -> ds.add(new DataSeriesItem(d.getGroup(), d.getCount())));
         chart.getConfiguration().addSeries(ds);
         chart.getConfiguration().getxAxis().setType(AxisType.CATEGORY);
 
-        return new VerticalLayout(chart);
+        VerticalLayout vl = new VerticalLayout(chart);
+        vl.setMargin(true);
+        return vl;
     }
 
     private Layout getDoctorChart() {
@@ -73,20 +88,12 @@ public class AnalyticsView extends MainView {
         DataSeries ds = new DataSeries();
 
         List<StringLongPair> data = service.getStatsByDoctor();
-        data.forEach(d->ds.add(new DataSeriesItem(d.getGroup(),d.getCount())));
+        data.forEach(d -> ds.add(new DataSeriesItem(d.getGroup(), d.getCount())));
         chart.getConfiguration().addSeries(ds);
         chart.getConfiguration().getxAxis().setType(AxisType.CATEGORY);
 
-        return new VerticalLayout(chart);
-    }
-
-    @Override
-    public void subViewClose() {
-        // NOOP
-    }
-
-    @Override
-    public void repaint() {
-        // NOOP
+        VerticalLayout vl = new VerticalLayout(chart);
+        vl.setMargin(true);
+        return vl;
     }
 }

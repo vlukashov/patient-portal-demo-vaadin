@@ -19,9 +19,12 @@ public class LoginView extends VerticalLayout {
 
         TextField usernameField = new TextField("Username");
         PasswordField passwordField = new PasswordField("Password");
+        usernameField.setWidth("100%");
+        passwordField.setWidth("100%");
+
         Label errorLabel = new Label();
 
-        Button loginButton = new Button("Login");
+        Button loginButton = new NativeButton("Login");
         loginButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         loginButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
         loginButton.addClickListener(click -> {
@@ -35,7 +38,8 @@ public class LoginView extends VerticalLayout {
 
 
 
-        VerticalLayout loginBox = new VerticalLayout(title, new FormLayout(usernameField, passwordField), loginButton, errorLabel);
+        VerticalLayout loginBox = new VerticalLayout(title, usernameField, passwordField, loginButton, errorLabel);
+        loginBox.addStyleName("login-box");
         loginBox.setSizeUndefined();
         addComponent(loginBox);
     }

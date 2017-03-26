@@ -28,12 +28,18 @@ public class MainView extends VerticalLayout implements ViewDisplay {
         addComponent(new MainNavBar());
         addComponentsAndExpand(content);
         content.setSizeFull();
-
-        addAttachListener(a -> navigateToUrlOrDefault());
     }
 
-    private void navigateToUrlOrDefault() {
+    @Override
+    public void attach() {
+        super.attach();
+
+        setupNavigator();
+    }
+
+    private void setupNavigator() {
         Navigator navigator = getUI().getNavigator();
+        navigator.setErrorView(ErrorView.class);
 
         if (!navigator.getState().isEmpty()) {
             navigator.navigateTo(navigator.getState());

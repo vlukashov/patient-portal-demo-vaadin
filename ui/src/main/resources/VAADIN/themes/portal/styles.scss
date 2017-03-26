@@ -87,6 +87,8 @@ $danger-pink: #FF5DBA;
 
     .sub-nav-bar {
 
+      margin-bottom: $v-unit-size;
+
       .v-nativebutton {
         border: none;
         color: #B5B9BC;
@@ -112,11 +114,31 @@ $danger-pink: #FF5DBA;
         order: 1;
         width: 100%;
         margin-bottom: 30px;
+
+        .v-label {
+          font-size: 24px;
+          font-weight: 600;
+          line-height: 40px;
+        }
+
+        .first-name {
+          text-decoration: underline;
+        }
       }
 
       .details-layout {
         order: 2;
         width: 60%;
+
+        table {
+          width: 100%;
+
+          .v-formlayout-captioncell {
+            text-transform: uppercase;
+            color: #B5B9BC;
+          }
+        }
+
         & tr:nth-child(odd) {
           background: #FAFAFA;
         }

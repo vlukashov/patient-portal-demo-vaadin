@@ -79,6 +79,7 @@ public class ProfileView extends CssLayout implements SubView {
             addStyleName("name-layout");
 
             firstName = new Label();
+            firstName.addStyleName("first-name");
             firstName.setCaption("First name");
             middleName = new Label();
             middleName.setCaption("Middle name");

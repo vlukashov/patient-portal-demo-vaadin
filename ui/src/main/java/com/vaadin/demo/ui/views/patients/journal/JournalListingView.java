@@ -13,6 +13,8 @@ import com.vaadin.ui.themes.ValoTheme;
 import io.reactivex.disposables.Disposable;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.text.SimpleDateFormat;
+
 @SpringComponent
 public class JournalListingView extends VerticalLayout implements SubView {
 
@@ -53,17 +55,31 @@ public class JournalListingView extends VerticalLayout implements SubView {
         headerLayout.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
         nameLabel = new Label();
         nameLabel.addStyleName(ValoTheme.LABEL_H1);
-        Button addButton = new Button("New Entry");
+        Button addButton = new NativeButton("New Entry");
+        addButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
         addButton.setIcon(VaadinIcons.PLUS);
-        addButton.addStyleName("addButton");
         headerLayout.addComponentsAndExpand(nameLabel);
         headerLayout.addComponent(addButton);
         addComponent(headerLayout);
     }
 
     private void addGrid() {
-        journalGrid = new Grid<>(JournalEntry.class);
+        journalGrid = new Grid<>();
         journalGrid.setSizeFull();
+        journalGrid.addColumn(entry -> SimpleDateFormat.getDateInstance().format(entry.getDate())).setCaption("Date");
+        journalGrid.addColumn(entry -> entry.getAppointmentType().toString()).setCaption("Appointment");
+        journalGrid.addColumn(entry -> entry.getDoctor().toString()).setCaption("Doctor").setExpandRatio(1);
+        journalGrid.addColumn(JournalEntry::getEntry).setCaption("Notes").setExpandRatio(1).setMaximumWidth(400);
+
+        journalGrid.setDetailsGenerator(j -> {
+            Label notesLabel = new Label(j.getEntry());
+            notesLabel.setWidth("100%");
+            notesLabel.setCaption("NOTES");
+            return new VerticalLayout(notesLabel);
+        });
+
+        journalGrid.addItemClickListener(e ->
+                journalGrid.setDetailsVisible(e.getItem(), !journalGrid.isDetailsVisible(e.getItem())));
         addComponentsAndExpand(journalGrid);
     }
 

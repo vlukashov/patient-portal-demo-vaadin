@@ -1,21 +1,15 @@
 package com.vaadin.demo.ui.views;
 
-import com.vaadin.demo.ui.util.Nav;
+import com.vaadin.demo.ui.views.base.NavBar;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.Page;
-import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.NativeButton;
 
-import javax.annotation.PostConstruct;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+class MainNavBar extends NavBar {
 
-public class MainNavigation extends HorizontalLayout {
-
-    private Map<String, Button> navButtons = new LinkedHashMap<>();
-
-    public MainNavigation() {
+    MainNavBar() {
         addStyleName("main-nav");
         setSpacing(false);
         setMargin(false);
@@ -28,7 +22,7 @@ public class MainNavigation extends HorizontalLayout {
 
         navButtons.forEach((name, button) -> {
             button.addStyleName("link");
-            button.addClickListener(click -> Nav.navigateTo(name));
+            button.addClickListener(click -> getUI().getNavigator().navigateTo(name));
             addComponent(button);
         });
 
@@ -42,18 +36,5 @@ public class MainNavigation extends HorizontalLayout {
         addComponentsAndExpand(logout);
         logout.setWidth(null);
         setComponentAlignment(logout, Alignment.MIDDLE_RIGHT);
-
-        Nav.addListener(viewChange -> {
-            String viewName = viewChange.getViewName();
-            navButtons.forEach((name, button) -> {
-                if (name.equals(viewName)) {
-                    button.addStyleName("active");
-                } else {
-                    button.removeStyleName("active");
-                }
-            });
-
-            return true;
-        });
     }
 }

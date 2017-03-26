@@ -9,8 +9,4 @@ public interface SubView extends Component {
     String getTitle();
 
     boolean isFullScreen();
-
-    void enter();
-
-    void exit();
 }

@@ -9,6 +9,8 @@ public class LoginView extends VerticalLayout {
 
 
     public LoginView(LoginCallback callback) {
+        addStyleName("login-view");
+
         setSizeFull();
         setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 

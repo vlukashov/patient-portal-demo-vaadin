@@ -1,6 +1,6 @@
 package com.vaadin.demo.ui.views;
 
-import com.vaadin.demo.ui.util.Nav;
+import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewDisplay;
 import com.vaadin.spring.annotation.SpringComponent;
@@ -25,7 +25,7 @@ public class MainView extends VerticalLayout implements ViewDisplay {
         setSizeFull();
         setMargin(false);
 
-        addComponent(new MainNavigation());
+        addComponent(new MainNavBar());
         addComponentsAndExpand(content);
         content.setSizeFull();
 
@@ -33,10 +33,12 @@ public class MainView extends VerticalLayout implements ViewDisplay {
     }
 
     private void navigateToUrlOrDefault() {
-        if (!Nav.getState().isEmpty()) {
-            Nav.navigateTo(Nav.getState());
+        Navigator navigator = getUI().getNavigator();
+
+        if (!navigator.getState().isEmpty()) {
+            navigator.navigateTo(navigator.getState());
         } else {
-            Nav.navigateTo("patients");
+            navigator.navigateTo("patients");
         }
     }
 

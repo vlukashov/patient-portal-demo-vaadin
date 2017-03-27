@@ -15,11 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class PatientDetailsView extends CssLayoutView {
 
     private final PatientsService patientsService;
+    private final SubViewNavigator navigator;
     private CssLayout content;
 
 
     @Autowired
     public PatientDetailsView(PatientsService patientsService, SubViewNavigator navigator, ProfileView profileView, ProfileEditView profileEditView, JournalListingView journalListingView, JournalEditView journalEditView) {
+        this.navigator = navigator;
         addStyleName("patient-details-view");
 
         this.patientsService = patientsService;
@@ -47,6 +49,8 @@ public class PatientDetailsView extends CssLayoutView {
         super.attach();
         addSubscription(patientsService.getCurrentPatient().subscribe(maybePatient ->
                 setVisibility(maybePatient.isPresent())));
+
+        navigator.initFromUri();
     }
 
     private void setVisibility(boolean hasPatient) {

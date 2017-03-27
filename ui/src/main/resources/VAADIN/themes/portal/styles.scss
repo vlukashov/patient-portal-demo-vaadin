@@ -272,6 +272,14 @@ $danger-pink: #FF5DBA;
 
 @media (max-width: 600px) {
   .portal {
+    .main-nav {
+      height: 50px;
+
+      .link {
+        line-height: 50px;
+        width: 120px;
+      }
+    }
     .patient-details-view {
       left: 0;
       box-shadow: none;

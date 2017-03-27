@@ -7,11 +7,13 @@ import com.vaadin.demo.ui.views.patients.profile.ProfileEditView;
 import com.vaadin.demo.ui.views.patients.profile.ProfileView;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.CssLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
 @SpringComponent
+@ViewScope
 public class PatientDetailsView extends CssLayoutView {
 
     private final PatientsService patientsService;
@@ -50,7 +52,7 @@ public class PatientDetailsView extends CssLayoutView {
         addSubscription(patientsService.getCurrentPatient().subscribe(maybePatient ->
                 setVisibility(maybePatient.isPresent())));
 
-        navigator.initFromUri();
+        navigator.initFromUri("profile");
     }
 
     private void setVisibility(boolean hasPatient) {

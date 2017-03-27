@@ -12,6 +12,7 @@ import com.vaadin.demo.ui.views.patients.SubView;
 import com.vaadin.demo.ui.views.patients.SubViewHeader;
 import com.vaadin.demo.ui.views.patients.SubViewNavigator;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 
 @SpringComponent
+@ViewScope
 public class ProfileEditView extends VerticalLayoutView implements SubView {
 
     private DoctorRepository doctorRepository;
@@ -28,7 +30,6 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
 
     @Autowired
     public ProfileEditView(DoctorRepository doctorRepository, PatientsService patientsService, SubViewNavigator navigator) {
-
         this.doctorRepository = doctorRepository;
         this.patientsService = patientsService;
         this.navigator = navigator;

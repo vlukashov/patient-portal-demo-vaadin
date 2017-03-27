@@ -1,20 +1,17 @@
 package com.vaadin.demo.ui.views.patients;
 
-import com.vaadin.demo.ui.views.patients.journal.JournalEditView;
-import com.vaadin.demo.ui.views.patients.journal.JournalListingView;
-import com.vaadin.demo.ui.views.patients.profile.ProfileEditView;
-import com.vaadin.demo.ui.views.patients.profile.ProfileView;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.ViewScope;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.PublishSubject;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.util.*;
 
 @SpringComponent
+@ViewScope
 public class SubViewNavigator {
     private final PatientsService patientsService;
     private final Disposable subscription;
@@ -23,7 +20,7 @@ public class SubViewNavigator {
 
     private String prefix;
     private Long id;
-    private String subViewUrl;
+    private String currentUrl;
 
 
     @Autowired
@@ -32,6 +29,7 @@ public class SubViewNavigator {
 
         subscription = patientsService.getCurrentPatient().subscribe(p -> {
             p.ifPresent(patient -> id = patient.getId());
+            navigateTo(currentUrl);
         });
     }
 
@@ -40,6 +38,7 @@ public class SubViewNavigator {
     }
 
     public void navigateTo(String url) {
+        currentUrl = url;
         views.stream().filter(v -> v.getUrl().equals(url)).findFirst().ifPresent(view -> viewSubject.onNext(view));
         Page.getCurrent().setUriFragment(prefix + "/" + id + "/" + url, false);
     }
@@ -52,7 +51,7 @@ public class SubViewNavigator {
         return viewSubject;
     }
 
-    public void initFromUri() {
+    public void initFromUri(String fallback) {
         List<String> parts = new LinkedList<>(Arrays.asList(Page.getCurrent().getUriFragment().split("/")));
 
 
@@ -69,6 +68,8 @@ public class SubViewNavigator {
 
         if (parts.size() > 0) {
             navigateTo(String.join("/", parts));
+        } else {
+            navigateTo(fallback);
         }
     }
 

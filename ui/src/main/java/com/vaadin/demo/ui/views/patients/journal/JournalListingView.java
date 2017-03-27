@@ -6,8 +6,10 @@ import com.vaadin.demo.entities.Patient;
 import com.vaadin.demo.service.PatientService;
 import com.vaadin.demo.ui.views.patients.PatientsService;
 import com.vaadin.demo.ui.views.patients.SubView;
+import com.vaadin.demo.ui.views.patients.SubViewNavigator;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import io.reactivex.disposables.Disposable;
@@ -16,11 +18,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.text.SimpleDateFormat;
 
 @SpringComponent
+@ViewScope
 public class JournalListingView extends VerticalLayout implements SubView {
 
 
-    final PatientsService patientsService;
+    private final PatientsService patientsService;
     private PatientService patientService;
+    private SubViewNavigator navigator;
     private Grid<JournalEntry> journalGrid;
     private Disposable sub;
     private Label nameLabel;
@@ -42,9 +46,10 @@ public class JournalListingView extends VerticalLayout implements SubView {
 
 
     @Autowired
-    public JournalListingView(PatientsService patientsService, PatientService patientService) {
+    public JournalListingView(PatientsService patientsService, PatientService patientService, SubViewNavigator navigator) {
         this.patientsService = patientsService;
         this.patientService = patientService;
+        this.navigator = navigator;
 
         addHeaderLayout();
         addGrid();
@@ -55,7 +60,7 @@ public class JournalListingView extends VerticalLayout implements SubView {
         headerLayout.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
         nameLabel = new Label();
         nameLabel.addStyleName(ValoTheme.LABEL_H1);
-        Button addButton = new NativeButton("New Entry");
+        Button addButton = new NativeButton("New Entry", click -> navigator.navigateTo("journal/new"));
         addButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
         addButton.setIcon(VaadinIcons.PLUS);
         headerLayout.addComponentsAndExpand(nameLabel);

@@ -7,6 +7,7 @@ import com.vaadin.demo.ui.views.patients.PatientsService;
 import com.vaadin.demo.ui.views.patients.SubView;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.text.SimpleDateFormat;
 
 @SpringComponent
+@ViewScope
 public class ProfileView extends CssLayoutView implements SubView {
 
     private final PatientsService patientsService;

@@ -3,14 +3,15 @@ package com.vaadin.demo.ui.views.patients;
 import com.vaadin.demo.entities.Patient;
 import com.vaadin.demo.repositories.PatientRepository;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.ViewScope;
 import io.reactivex.subjects.BehaviorSubject;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Optional;
 
 @SpringComponent
+@ViewScope
 public class PatientsService {
 
     private BehaviorSubject<List<Patient>> patients = BehaviorSubject.create();

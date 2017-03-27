@@ -4,6 +4,7 @@ package com.vaadin.demo.ui.views.patients.journal;
 import com.vaadin.demo.entities.JournalEntry;
 import com.vaadin.demo.entities.Patient;
 import com.vaadin.demo.service.PatientService;
+import com.vaadin.demo.ui.views.base.Responsive;
 import com.vaadin.demo.ui.views.base.VerticalLayoutView;
 import com.vaadin.demo.ui.views.patients.PatientsService;
 import com.vaadin.demo.ui.views.patients.SubView;
@@ -12,15 +13,16 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.*;
+import com.vaadin.ui.renderers.ComponentRenderer;
 import com.vaadin.ui.themes.ValoTheme;
-import io.reactivex.disposables.Disposable;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 @SpringComponent
 @ViewScope
-public class JournalListingView extends VerticalLayoutView implements SubView {
+public class JournalListingView extends VerticalLayoutView implements SubView, Responsive {
 
 
     private final PatientsService patientsService;
@@ -55,6 +57,24 @@ public class JournalListingView extends VerticalLayoutView implements SubView {
         addGrid();
     }
 
+    @Override
+    public void attach() {
+        super.attach();
+
+        addDetachListener(addResponsiveListener(mode -> {
+            if (mode == Mode.NARROW) {
+                setupNarrowGrid();
+            } else if (mode == Mode.WIDE) {
+                setupWideGrid();
+            }
+        }));
+
+        addSubscription(patientsService.getCurrentPatient().distinct().subscribe(patient ->
+                patient.ifPresent(p -> updateFromPatient(patientService.findAttached(p)))
+        ));
+    }
+
+
     private void addHeaderLayout() {
         HorizontalLayout headerLayout = new HorizontalLayout();
         headerLayout.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
@@ -71,13 +91,48 @@ public class JournalListingView extends VerticalLayoutView implements SubView {
     private void addGrid() {
         journalGrid = new Grid<>();
         journalGrid.setSizeFull();
+        addComponentsAndExpand(journalGrid);
+    }
+
+    private void setupNarrowGrid() {
+        journalGrid.getDataProvider().refreshAll();
+        journalGrid.removeAllColumns();
+
+        journalGrid.addColumn(patient -> {
+            NativeButton toggleButton = new NativeButton();
+            toggleButton.setIcon(VaadinIcons.CHEVRON_RIGHT);
+            toggleButton.addClickListener(click -> {
+                boolean visible = !journalGrid.isDetailsVisible(patient);
+                journalGrid.setDetailsVisible(patient, visible);
+                // Changing the icon doesn't get updated on the client for some reason
+                toggleButton.setIcon(visible ? VaadinIcons.CHEVRON_DOWN : VaadinIcons.CHEVRON_RIGHT);
+            });
+            return toggleButton;
+        }, new ComponentRenderer());
+        journalGrid.addColumn(entry -> SimpleDateFormat.getDateInstance(DateFormat.MEDIUM).format(entry.getDate())).setCaption("Date");
+        journalGrid.addColumn(entry -> entry.getAppointmentType().toString()).setCaption("Appointment");
+
+        journalGrid.setDetailsGenerator(entry -> {
+            Label doctorLabel = new Label(entry.getDoctor().getLastName() + ", " + entry.getDoctor().getFirstName());
+            doctorLabel.setCaption("Doctor");
+            Label notesLabel = new Label(entry.getEntry());
+            notesLabel.setWidth("100%");
+            notesLabel.setCaption("NOTES");
+            FormLayout layout = new FormLayout(doctorLabel, notesLabel);
+            layout.setMargin(true);
+            return layout;
+        });
+    }
+
+    private void setupWideGrid() {
+        journalGrid.removeAllColumns();
         journalGrid.addColumn(entry -> SimpleDateFormat.getDateInstance().format(entry.getDate())).setCaption("Date");
         journalGrid.addColumn(entry -> entry.getAppointmentType().toString()).setCaption("Appointment");
         journalGrid.addColumn(entry -> entry.getDoctor().toString()).setCaption("Doctor").setExpandRatio(1);
         journalGrid.addColumn(JournalEntry::getEntry).setCaption("Notes").setExpandRatio(1).setMaximumWidth(400);
 
-        journalGrid.setDetailsGenerator(j -> {
-            Label notesLabel = new Label(j.getEntry());
+        journalGrid.setDetailsGenerator(entry -> {
+            Label notesLabel = new Label(entry.getEntry());
             notesLabel.setWidth("100%");
             notesLabel.setCaption("NOTES");
             return new VerticalLayout(notesLabel);
@@ -85,7 +140,8 @@ public class JournalListingView extends VerticalLayoutView implements SubView {
 
         journalGrid.addItemClickListener(e ->
                 journalGrid.setDetailsVisible(e.getItem(), !journalGrid.isDetailsVisible(e.getItem())));
-        addComponentsAndExpand(journalGrid);
+
+        journalGrid.getDataProvider().refreshAll();
     }
 
 
@@ -94,13 +150,6 @@ public class JournalListingView extends VerticalLayoutView implements SubView {
         nameLabel.setValue(patient.getFirstName() + " " + patient.getLastName());
     }
 
-    @Override
-    public void attach() {
-        super.attach();
 
-        addSubscription(patientsService.getCurrentPatient().distinct().subscribe(patient ->
-                patient.ifPresent(p -> updateFromPatient(patientService.findAttached(p)))
-        ));
-    }
 
 }

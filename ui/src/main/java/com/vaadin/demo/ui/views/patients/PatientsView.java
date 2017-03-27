@@ -107,6 +107,8 @@ public class PatientsView extends CssLayoutView implements View, Responsive {
             return detailsButton;
         }, new ComponentRenderer());
         patientsGrid.setDetailsGenerator(PatientDetailsRow::new);
+
+        // Grid doesn't redraw rows when changing columns, force redraw
         patientsGrid.getDataProvider().refreshAll();
     }
 

@@ -32,7 +32,7 @@ class SubNavBar extends NavBar {
             subPagesLayout.addComponent(button);
         });
 
-        NativeButton editButton = new NativeButton("Edit Patient", click -> navigator.navigateTo("profile/edit"));
+        NativeButton editButton = new NativeButton("Edit", click -> navigator.navigateTo("profile/edit"));
         addComponents(backButton, subPagesLayout, editButton);
 
         setExpandRatio(subPagesLayout, 1);

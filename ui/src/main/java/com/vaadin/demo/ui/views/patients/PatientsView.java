@@ -8,10 +8,13 @@ import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.components.grid.SingleSelectionModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
+import java.util.Optional;
+import java.util.Set;
 
 @SpringComponent
 @SpringView(name = "patients")
@@ -43,7 +46,11 @@ public class PatientsView extends CssLayoutView implements View {
     @Override
     public void attach() {
         super.attach();
-        addSubscription(patientsService.getPatients().subscribe(p -> patientsGrid.setItems(p)));
+        addSubscription(patientsService.getPatients().subscribe(p -> {
+            Set<Patient> selectedItems = patientsGrid.getSelectedItems();
+            patientsGrid.setItems(p);
+            selectedItems.iterator().forEachRemaining(selected -> patientsGrid.select(selected));
+        }));
         addSubscription(patientsService.getCurrentPatient().subscribe(p -> p.ifPresent(patient -> patientsGrid.select(patient))));
     }
 

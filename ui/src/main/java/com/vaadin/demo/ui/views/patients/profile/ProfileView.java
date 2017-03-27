@@ -2,24 +2,26 @@ package com.vaadin.demo.ui.views.patients.profile;
 
 
 import com.vaadin.demo.entities.Patient;
+import com.vaadin.demo.ui.views.base.CssLayoutView;
 import com.vaadin.demo.ui.views.patients.PatientsService;
 import com.vaadin.demo.ui.views.patients.SubView;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.ui.*;
-import io.reactivex.disposables.Disposable;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Image;
+import com.vaadin.ui.Label;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.SimpleDateFormat;
 
 @SpringComponent
-public class ProfileView extends CssLayout implements SubView {
+public class ProfileView extends CssLayoutView implements SubView {
 
     private final PatientsService patientsService;
     private final NameLayout nameLayout;
     private final Image picture;
     private final DetailsLayout detailsLayout;
-    private Disposable reg;
 
     @Autowired
     public ProfileView(PatientsService patientsService) {
@@ -51,21 +53,15 @@ public class ProfileView extends CssLayout implements SubView {
     @Override
     public void attach() {
         super.attach();
-        reg = patientsService.getCurrentPatient().subscribe(patient -> {
+        addSubscription(patientsService.getCurrentPatient().subscribe(patient -> {
             patient.ifPresent(this::updateFromPatient);
-        });
+        }));
     }
 
     private void updateFromPatient(Patient patient) {
         nameLayout.update(patient);
         detailsLayout.update(patient);
         picture.setSource(new ExternalResource(patient.getPictureUrl()));
-    }
-
-    @Override
-    public void detach() {
-        super.detach();
-        reg.dispose();
     }
 
 

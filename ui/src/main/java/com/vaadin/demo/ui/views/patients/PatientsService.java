@@ -43,4 +43,10 @@ public class PatientsService {
         currentPatient.onNext(Optional.of(repo.save(p)));
         patients.onNext(repo.findAll());
     }
+
+    public void deleteCurrentPatient() {
+        currentPatient.getValue().ifPresent(p -> repo.delete(p.getId()));
+        patients.onNext(repo.findAll());
+        currentPatient.onNext(Optional.empty());
+    }
 }

@@ -95,6 +95,7 @@ $danger-pink: #FF5DBA;
         text-transform: uppercase;
         background: transparent;
         cursor: pointer;
+        border-radius: 0;
 
         &.active {
           color: #9DD22D;
@@ -136,6 +137,7 @@ $danger-pink: #FF5DBA;
           .v-formlayout-captioncell {
             text-transform: uppercase;
             color: #B5B9BC;
+            text-align: right;
           }
         }
 
@@ -201,6 +203,7 @@ $danger-pink: #FF5DBA;
   }
 
   button,
+  .v-button,
   a.button {
     background: transparent;
     border: none;
@@ -260,7 +263,8 @@ $danger-pink: #FF5DBA;
     cursor: not-allowed;
   }
 
-  .v-captiontext {
+  .v-captiontext,
+  .v-formlayout-captioncell {
     text-transform: uppercase;
     color: #B3B3B3;
   }

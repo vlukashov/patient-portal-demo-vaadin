@@ -3,11 +3,13 @@ package com.vaadin.demo.ui.views;
 import com.vaadin.demo.ui.views.base.NavBar;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.Page;
+import com.vaadin.shared.Registration;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.NativeButton;
 
 class MainNavBar extends NavBar {
+    private Registration registration;
 
     MainNavBar() {
         addStyleName("main-nav");
@@ -36,5 +38,30 @@ class MainNavBar extends NavBar {
         addComponentsAndExpand(logout);
         logout.setWidth(null);
         setComponentAlignment(logout, Alignment.MIDDLE_RIGHT);
+    }
+
+
+
+    @Override
+    public void attach() {
+        super.attach();
+        registration = getUI().getNavigator().addViewChangeListener(viewChange -> {
+            String viewName = viewChange.getViewName();
+            navButtons.forEach((name, button) -> {
+                if (name.equals(viewName)) {
+                    button.addStyleName("active");
+                } else {
+                    button.removeStyleName("active");
+                }
+            });
+
+            return true;
+        });
+    }
+
+    @Override
+    public void detach() {
+        super.detach();
+        registration.remove();
     }
 }

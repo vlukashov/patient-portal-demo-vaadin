@@ -32,6 +32,7 @@ public class AnalyticsView extends VerticalLayout implements View {
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         Page.getCurrent().setTitle("Analytics");
+        String parameters = event.getParameters();
     }
 
     @PostConstruct

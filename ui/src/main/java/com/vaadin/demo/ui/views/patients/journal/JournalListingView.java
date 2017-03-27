@@ -4,6 +4,7 @@ package com.vaadin.demo.ui.views.patients.journal;
 import com.vaadin.demo.entities.JournalEntry;
 import com.vaadin.demo.entities.Patient;
 import com.vaadin.demo.service.PatientService;
+import com.vaadin.demo.ui.views.base.VerticalLayoutView;
 import com.vaadin.demo.ui.views.patients.PatientsService;
 import com.vaadin.demo.ui.views.patients.SubView;
 import com.vaadin.demo.ui.views.patients.SubViewNavigator;
@@ -19,14 +20,13 @@ import java.text.SimpleDateFormat;
 
 @SpringComponent
 @ViewScope
-public class JournalListingView extends VerticalLayout implements SubView {
+public class JournalListingView extends VerticalLayoutView implements SubView {
 
 
     private final PatientsService patientsService;
     private PatientService patientService;
     private SubViewNavigator navigator;
     private Grid<JournalEntry> journalGrid;
-    private Disposable sub;
     private Label nameLabel;
 
     @Override
@@ -98,15 +98,9 @@ public class JournalListingView extends VerticalLayout implements SubView {
     public void attach() {
         super.attach();
 
-        sub = patientsService.getCurrentPatient().subscribe(patient ->
+        addSubscription(patientsService.getCurrentPatient().distinct().subscribe(patient ->
                 patient.ifPresent(p -> updateFromPatient(patientService.findAttached(p)))
-        );
+        ));
     }
 
-
-    @Override
-    public void detach() {
-        super.detach();
-        sub.dispose();
-    }
 }

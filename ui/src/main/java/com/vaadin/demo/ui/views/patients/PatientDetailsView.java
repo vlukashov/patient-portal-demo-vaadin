@@ -51,13 +51,12 @@ public class PatientDetailsView extends CssLayoutView {
         super.attach();
         addSubscription(patientsService.getCurrentPatient().subscribe(maybePatient ->
                 setVisibility(maybePatient.isPresent())));
-
-        navigator.initFromUri("profile");
     }
 
     private void setVisibility(boolean hasPatient) {
         if (hasPatient) {
             addStyleName("open");
+            navigator.initFromUri("profile");
         } else {
             removeStyleName("open");
         }

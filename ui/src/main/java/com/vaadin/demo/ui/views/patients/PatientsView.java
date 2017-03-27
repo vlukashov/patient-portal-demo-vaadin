@@ -47,7 +47,7 @@ public class PatientsView extends CssLayoutView implements View {
             patientsGrid.setItems(p);
             patientsService.getCurrentPatient().getValue().ifPresent(selected -> patientsGrid.select(selected));
         }));
-        addSubscription(patientsService.getCurrentPatient().subscribe(p -> p.ifPresent(patient -> patientsGrid.select(patient))));
+        addSubscription(patientsService.getCurrentPatient().distinct().subscribe(p -> p.ifPresent(patient -> patientsGrid.select(patient))));
     }
 
     private void buildLayout() {

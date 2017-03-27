@@ -12,8 +12,6 @@ $danger-pink: #FF5DBA;
 .portal {
   @include valo;
 
-
-
   .login-view {
     .login-box {
       width: 400px;
@@ -111,6 +109,8 @@ $danger-pink: #FF5DBA;
       align-items: flex-start;
       flex-wrap: wrap;
 
+
+
       .name-layout {
         order: 1;
         width: 100%;
@@ -153,14 +153,22 @@ $danger-pink: #FF5DBA;
         text-align: center;
         background: #FAFAFA;
       }
-    }
-  }
 
-  @media (max-width: 600px) {
-    .patient-details-view.open {
-      left: 0;
-      box-shadow: none;
-      border: none;
+      //@media screen and (max-width: 900px) {
+      //  flex-direction: column;
+      //  align-items: center;
+      //  width: 90%;
+      //
+      //  .details-layout {
+      //    width: 100%;
+      //  }
+      //
+      //  .profile-picture {
+      //    order: 0;
+      //    width: 60%;
+      //    margin-bottom: 20px;
+      //  }
+      //}
     }
   }
 
@@ -231,19 +239,19 @@ $danger-pink: #FF5DBA;
   button:active,
   a.button:focus,
   a.button:hover,
-  a.button:active{
+  a.button:active {
     cursor: pointer;
     color: #727A7F;
   }
 
   button.primary,
-  a.button.primary{
+  a.button.primary {
     background: #454D53;
     color: #fff;
   }
 
   button.danger,
-  a.button.danger{
+  a.button.danger {
     color: #FF5DBA;
   }
 
@@ -252,7 +260,7 @@ $danger-pink: #FF5DBA;
   button.danger:active,
   a.button.danger:focus,
   a.button.danger:hover,
-  a.button.danger:active{
+  a.button.danger:active {
     background: #FF5DBA;
     color: #fff;
   }
@@ -267,5 +275,15 @@ $danger-pink: #FF5DBA;
   .v-formlayout-captioncell {
     text-transform: uppercase;
     color: #B3B3B3;
+  }
+}
+
+@media (max-width: 600px) {
+  .portal{
+    .profile-view {
+      left: 0;
+      box-shadow: none;
+      border: none;
+    }
   }
 }

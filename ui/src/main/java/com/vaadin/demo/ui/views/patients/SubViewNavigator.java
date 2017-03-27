@@ -27,9 +27,11 @@ public class SubViewNavigator {
     SubViewNavigator(PatientsService patientsService) {
         this.patientsService = patientsService;
 
-        subscription = patientsService.getCurrentPatient().subscribe(p -> {
+        subscription = patientsService.getCurrentPatient().distinct().subscribe(p -> {
             p.ifPresent(patient -> id = patient.getId());
-            navigateTo(currentUrl);
+            if (prefix != null && currentUrl != null) {
+                navigateTo(currentUrl);
+            }
         });
     }
 
@@ -45,6 +47,7 @@ public class SubViewNavigator {
 
     public void close() {
         patientsService.getCurrentPatient().onNext(Optional.empty());
+        Page.getCurrent().setUriFragment(prefix, false);
     }
 
     public PublishSubject<SubView> getViewSubject() {

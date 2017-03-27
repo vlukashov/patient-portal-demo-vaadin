@@ -79,7 +79,7 @@ public class JournalEditView extends VerticalLayoutView implements SubView {
     @Override
     public void attach() {
         super.attach();
-        addSubscription(patientsService.getCurrentPatient().subscribe(p -> p.ifPresent(this::updateFromPatient)));
+        addSubscription(patientsService.getCurrentPatient().distinct().subscribe(p -> p.ifPresent(this::updateFromPatient)));
     }
 
     private void updateFromPatient(Patient patient) {

@@ -95,7 +95,7 @@ public class JournalEditView extends VerticalLayoutView implements SubView {
 
     @Override
     public String getTitle() {
-        return "Add Patient Journal Entry";
+        return "New Journal Entry";
     }
 
     @Override

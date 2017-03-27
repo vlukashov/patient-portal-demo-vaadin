@@ -75,7 +75,7 @@ public class AnalyticsView extends VerticalLayout implements View {
 
     private Layout getDoctorChart() {
 
-        return getChart("Avg. Patient age by Doctor", service.getStatsByDoctor(), "Doctor");
+        return getChart("Patients per Doctor", service.getStatsByDoctor(), "Doctor");
     }
 
     private Layout getChart(String title, List<StringLongPair> data, String caption) {

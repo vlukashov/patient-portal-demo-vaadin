@@ -1,5 +1,6 @@
 package com.vaadin.demo.ui.views.patients;
 
+import com.vaadin.annotations.Viewport;
 import com.vaadin.demo.entities.Patient;
 import com.vaadin.demo.ui.views.base.CssLayoutView;
 import com.vaadin.navigator.View;

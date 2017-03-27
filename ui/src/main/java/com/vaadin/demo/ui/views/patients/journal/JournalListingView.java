@@ -59,7 +59,7 @@ public class JournalListingView extends VerticalLayoutView implements SubView {
         HorizontalLayout headerLayout = new HorizontalLayout();
         headerLayout.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
         nameLabel = new Label();
-        nameLabel.addStyleName(ValoTheme.LABEL_H1);
+        nameLabel.addStyleName(ValoTheme.LABEL_H2);
         Button addButton = new NativeButton("New Entry", click -> navigator.navigateTo("journal/new"));
         addButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
         addButton.setIcon(VaadinIcons.PLUS);

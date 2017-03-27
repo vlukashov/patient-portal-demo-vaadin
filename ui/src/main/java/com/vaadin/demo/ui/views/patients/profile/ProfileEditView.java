@@ -30,6 +30,7 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
 
     @Autowired
     public ProfileEditView(DoctorRepository doctorRepository, PatientsService patientsService, SubViewNavigator navigator) {
+        addStyleName("profile-edit-view");
         this.doctorRepository = doctorRepository;
         this.patientsService = patientsService;
         this.navigator = navigator;
@@ -37,6 +38,7 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
 
     @PostConstruct
     void init() {
+        setMargin(false);
         buildLayout();
     }
 

@@ -20,6 +20,7 @@ class SubNavBar extends NavBar {
 
         NativeButton backButton = new NativeButton("All patients", click -> navigator.close());
         backButton.setIcon(VaadinIcons.ARROW_LONG_LEFT);
+        backButton.addStyleName("back-button");
 
         HorizontalLayout subPagesLayout = new HorizontalLayout();
         subPagesLayout.addStyleName("sub-pages");

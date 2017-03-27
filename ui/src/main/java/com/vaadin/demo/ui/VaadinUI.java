@@ -1,6 +1,7 @@
 package com.vaadin.demo.ui;
 
 import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.Viewport;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.demo.ui.security.SecurityUtils;
 import com.vaadin.demo.ui.views.LoginView;
@@ -20,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 @SpringUI
 @Theme("portal")
+@Viewport("width=device-width, initial-scale=1")
 @Widgetset("com.vaadin.demo.ui.PatientPortalWidgetSet")
 public class VaadinUI extends UI {
 

@@ -79,6 +79,16 @@ $danger-pink: #FF5DBA;
       flex-direction: column;
     }
 
+    .h1 {
+      color: #9DD22D;
+      text-transform: uppercase;
+      display: inline-block;
+      margin: 1rem auto;
+      border-bottom: 2px solid #9DD22D;
+      padding-bottom: 0.25rem;
+      font-size: 1.2rem;
+    }
+
     .content {
       flex: 1;
     }
@@ -108,8 +118,6 @@ $danger-pink: #FF5DBA;
       justify-content: space-between;
       align-items: flex-start;
       flex-wrap: wrap;
-
-
 
       .name-layout {
         order: 1;
@@ -153,22 +161,6 @@ $danger-pink: #FF5DBA;
         text-align: center;
         background: #FAFAFA;
       }
-
-      //@media screen and (max-width: 900px) {
-      //  flex-direction: column;
-      //  align-items: center;
-      //  width: 90%;
-      //
-      //  .details-layout {
-      //    width: 100%;
-      //  }
-      //
-      //  .profile-picture {
-      //    order: 0;
-      //    width: 60%;
-      //    margin-bottom: 20px;
-      //  }
-      //}
     }
   }
 
@@ -279,11 +271,69 @@ $danger-pink: #FF5DBA;
 }
 
 @media (max-width: 600px) {
-  .portal{
-    .profile-view {
+  .portal {
+    .patient-details-view {
       left: 0;
       box-shadow: none;
       border: none;
+
+      .sub-nav-bar {
+
+        .v-nativebutton {
+          padding-right: 0;
+          padding-left: 0;
+        }
+
+        .back-button {
+          .v-nativebutton-caption {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .portal {
+    .v-margin-top {
+      padding-top: 16px;
+    }
+
+    .v-margin-right {
+      padding-right: 16px;
+    }
+
+    .v-margin-bottom {
+      padding-bottom: 16px;
+    }
+
+    .v-margin-left {
+      padding-left: 16px;
+    }
+
+    .patient-details-view {
+      overflow-y: scroll;
+
+      .profile-view {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+
+        .name-layout {
+          width: auto;
+        }
+
+        .details-layout {
+          width: 100%;
+        }
+
+        .profile-picture {
+          order: 0;
+          width: 60%;
+          margin-bottom: 20px;
+        }
+      }
     }
   }
 }

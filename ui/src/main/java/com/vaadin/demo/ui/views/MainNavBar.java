@@ -28,12 +28,12 @@ class MainNavBar extends NavBar {
             addComponent(button);
         });
 
-        Button logout = new Button("Logout", click -> {
+        NativeButton logout = new NativeButton("Logout", click -> {
             Page.getCurrent().reload();
             getSession().close();
         });
-        logout.setIcon(VaadinIcons.SIGN_OUT);
         logout.addStyleName("link");
+        logout.setIcon(VaadinIcons.SIGN_OUT);
 
         addComponentsAndExpand(logout);
         logout.setWidth(null);

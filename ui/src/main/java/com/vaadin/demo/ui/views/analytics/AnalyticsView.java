@@ -28,44 +28,57 @@ public class AnalyticsView extends VerticalLayout implements View {
 
     @Autowired
     private AnalyticsService service;
+    private TabSheet tabSheet;
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         Page.getCurrent().setTitle("Analytics");
         String parameters = event.getParameters();
+        if (!parameters.isEmpty()) {
+            tabSheet.iterator().forEachRemaining(t -> {
+                if (t.getCaption().toLowerCase().equals(parameters)) {
+                    tabSheet.setSelectedTab(t);
+                }
+            });
+        }
     }
 
     @PostConstruct
     void init() {
-        TabSheet tabSheet = new TabSheet();
+        tabSheet = new TabSheet();
         tabSheet.setStyleName(ValoTheme.TABSHEET_CENTERED_TABS);
         tabSheet.addStyleName("detail-tabs");
         addComponent(tabSheet);
 
-        tabSheet.addTab(getAgeChart(), "Age");
-        tabSheet.addTab(getGenderChart(), "Gender");
-        tabSheet.addTab(getDoctorChart(), "Doctor");
+        tabSheet.addTab(getAgeChart());
+        tabSheet.addTab(getGenderChart());
+        tabSheet.addTab(getDoctorChart());
 
         addComponentsAndExpand(tabSheet);
+
+        tabSheet.addSelectedTabChangeListener(tabChanged -> {
+            String caption = tabSheet.getSelectedTab().getCaption().toLowerCase();
+            Page.getCurrent().setUriFragment("!analytics/" + caption, false);
+        });
     }
 
     private Layout getAgeChart() {
         List<StringLongPair> data = service.getStatsByAge();
         data.sort(Comparator.comparing(StringLongPair::getGroup));
 
-        return getChart("Patients bt Age", data);
+        return getChart("Patients bt Age", data, "Age");
     }
 
     private Layout getGenderChart() {
-        return getChart("Gender", service.getStatsByGender());
+        return getChart("Gender", service.getStatsByGender(), "Gender");
     }
 
     private Layout getDoctorChart() {
 
-        return getChart("Avg. Patient age by Doctor", service.getStatsByDoctor());
+        return getChart("Avg. Patient age by Doctor", service.getStatsByDoctor(), "Doctor");
     }
 
-    private Layout getChart(String title,  List<StringLongPair> data) {
+    private Layout getChart(String title, List<StringLongPair> data, String caption) {
         Chart chart = new Chart(ChartType.COLUMN);
         chart.getConfiguration().setTitle(title);
         DataSeries ds = new DataSeries();
@@ -73,6 +86,8 @@ public class AnalyticsView extends VerticalLayout implements View {
         chart.getConfiguration().addSeries(ds);
         chart.getConfiguration().getxAxis().setType(AxisType.CATEGORY);
 
-        return new VerticalLayout(chart);
+        VerticalLayout layout = new VerticalLayout(chart);
+        layout.setCaption(caption);
+        return layout;
     }
 }

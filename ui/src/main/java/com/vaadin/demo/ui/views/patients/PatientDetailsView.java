@@ -11,6 +11,7 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.CssLayout;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 
 
 @SpringComponent
@@ -23,7 +24,7 @@ public class PatientDetailsView extends CssLayoutView {
 
 
     @Autowired
-    public PatientDetailsView(PatientsService patientsService, SubViewNavigator navigator, ProfileView profileView, ProfileEditView profileEditView, JournalListingView journalListingView, JournalEditView journalEditView) {
+    public PatientDetailsView(PatientsService patientsService, SubViewNavigator navigator, @Lazy ProfileView profileView, @Lazy ProfileEditView profileEditView, @Lazy JournalListingView journalListingView, @Lazy JournalEditView journalEditView) {
         this.navigator = navigator;
         addStyleName("patient-details-view");
 

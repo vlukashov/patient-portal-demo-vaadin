@@ -23,12 +23,11 @@ public class SubViewNavigator {
     private Long id;
     private String currentUrl;
 
-
     @Autowired
     SubViewNavigator(PatientsService patientsService) {
         this.patientsService = patientsService;
 
-        subscription = patientsService.getCurrentPatient().distinct().subscribe(p -> {
+        subscription = patientsService.getCurrentPatient().subscribe(p -> {
             p.ifPresent(patient -> id = patient.getId());
             if (prefix != null && currentUrl != null) {
                 navigateTo(currentUrl);

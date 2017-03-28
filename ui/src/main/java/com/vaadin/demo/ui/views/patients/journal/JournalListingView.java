@@ -23,8 +23,6 @@ import java.text.SimpleDateFormat;
 @SpringComponent
 @ViewScope
 public class JournalListingView extends VerticalLayoutView implements SubView, Responsive {
-
-
     private final PatientsService patientsService;
     private PatientService patientService;
     private SubViewNavigator navigator;

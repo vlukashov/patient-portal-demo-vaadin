@@ -25,6 +25,7 @@ public class ProfileView extends CssLayoutView implements SubView {
     private final Image picture;
     private final DetailsLayout detailsLayout;
 
+
     @Autowired
     public ProfileView(PatientsService patientsService) {
         addStyleName("profile-view");

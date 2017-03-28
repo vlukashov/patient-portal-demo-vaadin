@@ -1,13 +1,14 @@
 package com.vaadin.demo.ui.views.patients.journal;
 
-import com.vaadin.demo.ui.converters.DateConverter;
-import com.vaadin.demo.ui.service.PatientsService;
-import com.vaadin.data.*;
+import com.vaadin.data.BeanValidationBinder;
+import com.vaadin.data.ValidationException;
 import com.vaadin.demo.entities.AppointmentType;
 import com.vaadin.demo.entities.Doctor;
 import com.vaadin.demo.entities.JournalEntry;
 import com.vaadin.demo.entities.Patient;
 import com.vaadin.demo.repositories.DoctorRepository;
+import com.vaadin.demo.ui.converters.DateConverter;
+import com.vaadin.demo.ui.service.PatientsService;
 import com.vaadin.demo.ui.views.base.VerticalLayoutView;
 import com.vaadin.demo.ui.views.patients.SubView;
 import com.vaadin.demo.ui.views.patients.SubViewHeader;
@@ -33,6 +34,7 @@ public class JournalEditView extends VerticalLayoutView implements SubView {
 
     @Autowired
     JournalEditView(DoctorRepository doctorRepository, PatientsService patientsService, SubViewNavigator navigator) {
+        addStyleName("journal-edit-view");
         this.doctorRepository = doctorRepository;
         this.patientsService = patientsService;
         this.navigator = navigator;
@@ -40,13 +42,11 @@ public class JournalEditView extends VerticalLayoutView implements SubView {
 
     @PostConstruct
     void init() {
-        addStyleName("journal-edit-view");
         buildLayout();
     }
 
     private void buildLayout() {
         setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-
 
         SubViewHeader header = new SubViewHeader(navigator, getTitle(), "journal");
         editorLayout = new JournalEditLayout();

@@ -1,8 +1,7 @@
-package com.vaadin.demo.ui.views.patients;
+package com.vaadin.demo.ui.service;
 
 import com.vaadin.demo.entities.JournalEntry;
 import com.vaadin.demo.entities.Patient;
-import com.vaadin.demo.repositories.JournalEntryRepository;
 import com.vaadin.demo.repositories.PatientRepository;
 import com.vaadin.demo.service.PatientService;
 import com.vaadin.spring.annotation.SpringComponent;
@@ -21,13 +20,12 @@ public class PatientsService {
     private BehaviorSubject<List<Patient>> patients;
     private BehaviorSubject<Optional<Patient>> currentPatient;
     private PatientRepository repo;
-    private JournalEntryRepository journalRepo;
+
     private PatientService patientService;
 
     @Autowired
-    PatientsService(PatientRepository repo, JournalEntryRepository journalRepo, PatientService patientService) {
+    PatientsService(PatientRepository repo, PatientService patientService) {
         this.repo = repo;
-        this.journalRepo = journalRepo;
         this.patientService = patientService;
     }
 
@@ -72,7 +70,6 @@ public class PatientsService {
     }
 
     public void addJournalEntry(JournalEntry entry) {
-
         currentPatient.getValue().ifPresent(patient->{
             Patient attached = patientService.findAttached(patient);
             attached.getJournalEntries().add(0, entry);

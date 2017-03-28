@@ -1,5 +1,6 @@
 package com.vaadin.demo.ui.views.patients;
 
+import com.vaadin.demo.ui.service.PatientsService;
 import com.vaadin.demo.ui.views.base.CssLayoutView;
 import com.vaadin.demo.ui.views.patients.journal.JournalEditView;
 import com.vaadin.demo.ui.views.patients.journal.JournalListingView;

@@ -4,6 +4,9 @@ import io.reactivex.disposables.Disposable;
 
 import java.util.Set;
 
+/**
+ * Helper for cleaning up subscriptions.
+ */
 public interface HasSubscriptions {
 
     default void addSubscription(Disposable disposable) {

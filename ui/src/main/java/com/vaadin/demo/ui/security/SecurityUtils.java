@@ -13,9 +13,4 @@ public final class SecurityUtils {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication != null && authentication.isAuthenticated();
     }
-
-    public static boolean hasRole(String role) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication != null && authentication.getAuthorities().contains(new SimpleGrantedAuthority(role));
-    }
 }

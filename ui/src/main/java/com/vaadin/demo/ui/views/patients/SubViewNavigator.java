@@ -1,5 +1,6 @@
 package com.vaadin.demo.ui.views.patients;
 
+import com.vaadin.demo.ui.service.PatientsService;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;

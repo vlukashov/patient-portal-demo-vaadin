@@ -1,6 +1,7 @@
 package com.vaadin.demo.ui.views.patients.journal;
 
-
+import com.vaadin.demo.ui.converters.DateConverter;
+import com.vaadin.demo.ui.service.PatientsService;
 import com.vaadin.data.*;
 import com.vaadin.demo.entities.AppointmentType;
 import com.vaadin.demo.entities.Doctor;
@@ -8,7 +9,6 @@ import com.vaadin.demo.entities.JournalEntry;
 import com.vaadin.demo.entities.Patient;
 import com.vaadin.demo.repositories.DoctorRepository;
 import com.vaadin.demo.ui.views.base.VerticalLayoutView;
-import com.vaadin.demo.ui.views.patients.PatientsService;
 import com.vaadin.demo.ui.views.patients.SubView;
 import com.vaadin.demo.ui.views.patients.SubViewHeader;
 import com.vaadin.demo.ui.views.patients.SubViewNavigator;
@@ -19,8 +19,6 @@ import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 
 @SpringComponent
@@ -139,19 +137,6 @@ public class JournalEditView extends VerticalLayoutView implements SubView {
 
         public void setPatient(Patient patient) {
             name.setValue(patient.getLastName() + ", " + patient.getFirstName());
-        }
-    }
-
-    class DateConverter implements Converter<LocalDate, Date> {
-
-        @Override
-        public Result<Date> convertToModel(LocalDate value, ValueContext context) {
-            return Result.ok(Date.from(value.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        }
-
-        @Override
-        public LocalDate convertToPresentation(Date value, ValueContext context) {
-            return value.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         }
     }
 

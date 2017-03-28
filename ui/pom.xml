@@ -6,7 +6,7 @@
     <groupId>com.vaadin.example</groupId>
     <artifactId>patient-portal-vaadin-ui</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <name>vaadin-patient-dashboard</name>
     <description>Demo project for Spring Boot</description>
@@ -85,16 +85,6 @@
             <artifactId>vaadin-patient-portal-widgetset</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-
-        <!--<dependency>-->
-        <!--<groupId>org.springframework.boot</groupId>-->
-        <!--<artifactId>spring-boot-starter-security</artifactId>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-        <!--<groupId>org.springframework.boot</groupId>-->
-        <!--<artifactId>spring-boot-starter-velocity</artifactId>-->
-        <!--</dependency>-->
     </dependencies>
 
     <dependencyManagement>
@@ -116,7 +106,25 @@
                     <addResources>true</addResources>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-maven-plugin</artifactId>
+                <version>${vaadin-version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>resources</goal>
+                            <goal>update-widgetset</goal>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!--<widgetsetMode>cdn</widgetsetMode>-->
+                </configuration>
+            </plugin>
         </plugins>
+
 
     </build>
 

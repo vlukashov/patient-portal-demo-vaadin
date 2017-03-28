@@ -9,6 +9,21 @@ $v-font-color: #434D54;
 $font-green: #9DD22D;
 $danger-pink: #FF5DBA;
 
+$v-included-components:
+  verticallayout,
+  label,
+  nativebutton,
+  textfield,
+  passwordfield,
+  button,
+  csslayout,
+  grid,
+  formlayout,
+  tabsheet,
+  popupdatefield,
+  combobox,
+  datefield;
+
 .portal {
   @include valo;
 

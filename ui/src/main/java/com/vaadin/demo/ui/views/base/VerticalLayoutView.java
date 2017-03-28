@@ -6,6 +6,9 @@ import io.reactivex.disposables.Disposable;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * CssLayout with helper for disposing subscriptions.
+ */
 public class VerticalLayoutView extends VerticalLayout implements HasSubscriptions {
 
     private Set<Disposable> subs = new HashSet<>();

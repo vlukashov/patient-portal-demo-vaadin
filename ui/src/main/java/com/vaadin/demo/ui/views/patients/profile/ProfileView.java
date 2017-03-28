@@ -2,8 +2,8 @@ package com.vaadin.demo.ui.views.patients.profile;
 
 
 import com.vaadin.demo.entities.Patient;
+import com.vaadin.demo.ui.service.PatientsService;
 import com.vaadin.demo.ui.views.base.CssLayoutView;
-import com.vaadin.demo.ui.views.patients.PatientsService;
 import com.vaadin.demo.ui.views.patients.SubView;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.spring.annotation.SpringComponent;

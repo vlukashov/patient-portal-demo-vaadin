@@ -4,6 +4,9 @@ import com.vaadin.server.ClientConnector;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Registration;
 
+/**
+ * Adds a listener for making programmatic changes based on viewport size.
+ */
 public interface Responsive {
 
     default ClientConnector.DetachListener addResponsiveListener(WindowResizeListener listener) {

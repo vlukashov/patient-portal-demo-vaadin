@@ -6,8 +6,9 @@ import com.vaadin.demo.entities.Doctor;
 import com.vaadin.demo.entities.Gender;
 import com.vaadin.demo.entities.Patient;
 import com.vaadin.demo.repositories.DoctorRepository;
+import com.vaadin.demo.ui.converters.DateConverter;
+import com.vaadin.demo.ui.service.PatientsService;
 import com.vaadin.demo.ui.views.base.VerticalLayoutView;
-import com.vaadin.demo.ui.views.patients.PatientsService;
 import com.vaadin.demo.ui.views.patients.SubView;
 import com.vaadin.demo.ui.views.patients.SubViewHeader;
 import com.vaadin.demo.ui.views.patients.SubViewNavigator;
@@ -59,6 +60,7 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
         formLayout.setWidth("80%");
 
         binder = new BeanValidationBinder<>(Patient.class);
+        binder.forField(formLayout.birthDate).withConverter(new DateConverter()).bind("birthDate");
         binder.bindInstanceFields(formLayout);
 
 
@@ -108,7 +110,7 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
         private final TextField middleName;
         private final TextField lastName;
         private final ComboBox<Gender> gender;
-        private final DateField dateOfBirth;
+        private final DateField birthDate;
         private final TextField ssn;
         private final ComboBox<Doctor> doctor;
 
@@ -126,14 +128,14 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
             gender.setItems(Gender.values());
             gender.setEmptySelectionAllowed(false);
 
-            dateOfBirth = new DateField("Date of Birth");
+            birthDate = new DateField("Date of Birth");
             ssn = new TextField("SSN");
 
             doctor = new ComboBox<>("Doctor");
             doctor.setItems(doctorRepository.findAll());
             doctor.setEmptySelectionAllowed(false);
 
-            addComponents(title, firstName, middleName, lastName, gender, dateOfBirth, ssn, doctor);
+            addComponents(title, firstName, middleName, lastName, gender, birthDate, ssn, doctor);
             iterator().forEachRemaining(c -> c.setWidth("100%"));
         }
     }

@@ -1,6 +1,7 @@
 package com.vaadin.demo.ui.views.patients;
 
 import com.vaadin.demo.entities.Patient;
+import com.vaadin.demo.ui.service.PatientsService;
 import com.vaadin.demo.ui.views.base.CssLayoutView;
 import com.vaadin.demo.ui.views.base.Responsive;
 import com.vaadin.icons.VaadinIcons;

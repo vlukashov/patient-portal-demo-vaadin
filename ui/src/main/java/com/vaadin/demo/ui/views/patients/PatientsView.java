@@ -62,7 +62,7 @@ public class PatientsView extends CssLayoutView implements View, Responsive {
                 patientsService.getCurrentPatient().getValue().ifPresent(selected -> patientsGrid.select(selected));
             }
         }));
-        addSubscription(patientsService.getCurrentPatient().distinct().subscribe(p -> {
+        addSubscription(patientsService.getCurrentPatient().subscribe(p -> {
             if (getLayoutMode() == Mode.WIDE) {
                 p.ifPresent(patient -> patientsGrid.select(patient));
             }
@@ -131,7 +131,11 @@ public class PatientsView extends CssLayoutView implements View, Responsive {
         ).setId("lastVisit").setCaption("Last visit");
 
 
-        gridSelectionRegistration = patientsGrid.addSelectionListener(e -> patientsService.getCurrentPatient().onNext(e.getFirstSelectedItem()));
+        gridSelectionRegistration = patientsGrid.addSelectionListener(e -> {
+            if(e.isUserOriginated()) {
+                patientsService.getCurrentPatient().onNext(e.getFirstSelectedItem());
+            }
+        });
         patientsGrid.getDataProvider().refreshAll();
     }
 

@@ -1,8 +1,7 @@
 package com.vaadin.demo.ui.views.patients.journal;
 
 
-import com.vaadin.data.BeanValidationBinder;
-import com.vaadin.data.ValidationException;
+import com.vaadin.data.*;
 import com.vaadin.demo.entities.AppointmentType;
 import com.vaadin.demo.entities.Doctor;
 import com.vaadin.demo.entities.JournalEntry;
@@ -20,6 +19,9 @@ import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 @SpringComponent
 @ViewScope
@@ -56,15 +58,14 @@ public class JournalEditView extends VerticalLayoutView implements SubView {
         cancelButton.addStyleName(ValoTheme.BUTTON_DANGER);
 
         binder = new BeanValidationBinder<>(JournalEntry.class);
+        binder.forField(editorLayout.date).withConverter(new DateConverter()).bind("date");
+        binder.bindInstanceFields(editorLayout);
 
         saveButton.addClickListener(click -> {
             try {
                 JournalEntry entry = binder.getBean();
                 binder.writeBean(entry);
-                patientsService.getCurrentPatient().getValue().ifPresent(p -> {
-                    p.getJournalEntries().add(entry);
-                    patientsService.savePatient(p);
-                });
+                patientsService.addJournalEntry(entry);
                 navigator.navigateTo("journal");
 
             } catch (ValidationException e) {
@@ -79,12 +80,15 @@ public class JournalEditView extends VerticalLayoutView implements SubView {
     @Override
     public void attach() {
         super.attach();
-        addSubscription(patientsService.getCurrentPatient().distinct().subscribe(p -> p.ifPresent(this::updateFromPatient)));
+        addSubscription(patientsService.getCurrentPatient().subscribe(p -> p.ifPresent(this::updateFromPatient)));
     }
 
     private void updateFromPatient(Patient patient) {
         editorLayout.setPatient(patient);
-        binder.setBean(new JournalEntry());
+        JournalEntry entry = new JournalEntry();
+        entry.setPatient(patient);
+        entry.setDate(new Date());
+        binder.setBean(entry);
     }
 
 
@@ -105,11 +109,11 @@ public class JournalEditView extends VerticalLayoutView implements SubView {
 
     class JournalEditLayout extends VerticalLayout {
 
-        private final Label name;
-        private final DateField date;
-        private final ComboBox<AppointmentType> appointmentType;
-        private final ComboBox<Doctor> doctor;
-        private final TextArea notes;
+        final Label name;
+        final DateField date;
+        final ComboBox<AppointmentType> appointmentType;
+        final ComboBox<Doctor> doctor;
+        final TextArea entry;
 
         JournalEditLayout() {
             addStyleName("journal-edit-layout");
@@ -123,10 +127,10 @@ public class JournalEditView extends VerticalLayoutView implements SubView {
             doctor.setItems(doctorRepository.findAll());
             doctor.setEmptySelectionAllowed(false);
 
-            notes = new TextArea("Notes");
+            entry = new TextArea("Notes");
 
             FormLayout innerForm = new FormLayout(name, date, appointmentType, doctor);
-            addComponents(innerForm, notes);
+            addComponents(innerForm, entry);
 
             innerForm.iterator().forEachRemaining(c -> c.setWidth("100%"));
             iterator().forEachRemaining(c -> c.setWidth("100%"));
@@ -135,6 +139,19 @@ public class JournalEditView extends VerticalLayoutView implements SubView {
 
         public void setPatient(Patient patient) {
             name.setValue(patient.getLastName() + ", " + patient.getFirstName());
+        }
+    }
+
+    class DateConverter implements Converter<LocalDate, Date> {
+
+        @Override
+        public Result<Date> convertToModel(LocalDate value, ValueContext context) {
+            return Result.ok(Date.from(value.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        }
+
+        @Override
+        public LocalDate convertToPresentation(Date value, ValueContext context) {
+            return value.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         }
     }
 

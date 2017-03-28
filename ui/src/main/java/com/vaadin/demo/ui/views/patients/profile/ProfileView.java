@@ -55,7 +55,7 @@ public class ProfileView extends CssLayoutView implements SubView {
     @Override
     public void attach() {
         super.attach();
-        addSubscription(patientsService.getCurrentPatient().distinct().subscribe(patient -> {
+        addSubscription(patientsService.getCurrentPatient().subscribe(patient -> {
             patient.ifPresent(this::updateFromPatient);
         }));
     }

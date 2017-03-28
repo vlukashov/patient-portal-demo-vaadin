@@ -69,7 +69,7 @@ public class JournalListingView extends VerticalLayoutView implements SubView, R
             }
         }));
 
-        addSubscription(patientsService.getCurrentPatient().distinct().subscribe(patient ->
+        addSubscription(patientsService.getCurrentPatient().subscribe(patient ->
                 patient.ifPresent(p -> updateFromPatient(patientService.findAttached(p)))
         ));
     }

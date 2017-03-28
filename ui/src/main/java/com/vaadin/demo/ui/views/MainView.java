@@ -41,7 +41,6 @@ public class MainView extends VerticalLayout implements ViewDisplay {
     @Override
     public void attach() {
         super.attach();
-
         setupNavigator();
     }
 

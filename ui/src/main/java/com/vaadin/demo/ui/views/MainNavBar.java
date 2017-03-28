@@ -14,7 +14,24 @@ class MainNavBar extends NavBar {
         addStyleName("main-nav");
         setSpacing(false);
         setMargin(false);
-        addAttachListener(attachEvent -> setupView());
+    }
+
+    @Override
+    public void attach() {
+        super.attach();
+        setupView();
+        registration = getUI().getNavigator().addViewChangeListener(viewChange -> {
+            String viewName = viewChange.getViewName();
+            navButtons.forEach((name, button) -> {
+                if (name.equals(viewName)) {
+                    button.addStyleName("active");
+                } else {
+                    button.removeStyleName("active");
+                }
+            });
+
+            return true;
+        });
     }
 
     private void setupView() {
@@ -39,24 +56,6 @@ class MainNavBar extends NavBar {
         setComponentAlignment(logout, Alignment.MIDDLE_RIGHT);
     }
 
-
-
-    @Override
-    public void attach() {
-        super.attach();
-        registration = getUI().getNavigator().addViewChangeListener(viewChange -> {
-            String viewName = viewChange.getViewName();
-            navButtons.forEach((name, button) -> {
-                if (name.equals(viewName)) {
-                    button.addStyleName("active");
-                } else {
-                    button.removeStyleName("active");
-                }
-            });
-
-            return true;
-        });
-    }
 
     @Override
     public void detach() {

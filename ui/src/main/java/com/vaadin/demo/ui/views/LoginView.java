@@ -24,7 +24,7 @@ public class LoginView extends VerticalLayout {
 
         Label errorLabel = new Label();
 
-        Button loginButton = new NativeButton("Login");
+        NativeButton loginButton = new NativeButton("Login");
         loginButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         loginButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
         loginButton.addClickListener(click -> {

@@ -24,7 +24,7 @@ public class PatientDetailsView extends CssLayoutView {
 
 
     @Autowired
-    public PatientDetailsView(PatientsService patientsService, SubViewNavigator navigator, @Lazy ProfileView profileView, @Lazy ProfileEditView profileEditView, @Lazy JournalListingView journalListingView, @Lazy JournalEditView journalEditView) {
+    public PatientDetailsView(PatientsService patientsService, SubViewNavigator navigator, ProfileView profileView, ProfileEditView profileEditView, JournalListingView journalListingView, JournalEditView journalEditView) {
         this.navigator = navigator;
         addStyleName("patient-details-view");
 

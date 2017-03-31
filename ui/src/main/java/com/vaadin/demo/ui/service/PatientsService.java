@@ -33,6 +33,7 @@ public class PatientsService {
     void init() {
         patients = BehaviorSubject.create();
         currentPatient = BehaviorSubject.create();
+        currentPatient.subscribe(p-> System.out.println("Patients service: " + p));
     }
 
     public BehaviorSubject<Optional<Patient>> getCurrentPatient() {
@@ -51,11 +52,7 @@ public class PatientsService {
     }
 
     public void selectPatient(Long id) {
-        currentPatient.getValue().ifPresent(p -> {
-            if (!p.getId().equals(id)) {
-                currentPatient.onNext(Optional.of(repo.findOne(id)));
-            }
-        });
+        currentPatient.onNext(Optional.of(repo.findOne(id)));
     }
 
     public void savePatient(Patient p) {

@@ -41,15 +41,26 @@ public class PatientsView extends CssLayoutView implements View, Responsive {
     @PostConstruct
     void init() {
         setSizeFull();
-        addComponent(detailsView);
+
+        NativeButton addPatientButton = new NativeButton("Add patient");
+        addPatientButton.addStyleName("primary");
+        addPatientButton.addClickListener(click -> {
+            patientsService.getCurrentPatient().onNext(Optional.of(new Patient()));
+        });
+
         patientsGrid = new Grid<>();
         patientsGrid.setSizeFull();
-        addComponent(patientsGrid);
+        addComponents(detailsView, addPatientButton, patientsGrid);
     }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         Page.getCurrent().setTitle("Patients");
+
+        String[] params = event.getParameters().split("/");
+        if (params.length > 0 && params[0].matches("\\d+")) {
+            patientsService.selectPatient(Long.valueOf(params[0]));
+        }
     }
 
     @Override
@@ -133,8 +144,9 @@ public class PatientsView extends CssLayoutView implements View, Responsive {
 
 
         gridSelectionRegistration = patientsGrid.addSelectionListener(e -> {
-            if(e.isUserOriginated()) {
-                patientsService.getCurrentPatient().onNext(e.getFirstSelectedItem());
+            if (e.isUserOriginated()) {
+                Optional<Patient> firstSelectedItem = e.getFirstSelectedItem();
+                patientsService.getCurrentPatient().onNext(firstSelectedItem);
             }
         });
         patientsGrid.getDataProvider().refreshAll();

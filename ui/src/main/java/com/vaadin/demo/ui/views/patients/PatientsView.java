@@ -44,11 +44,13 @@ public class PatientsView extends CssLayoutView implements View, Responsive {
 
         NativeButton addPatientButton = new NativeButton("Add patient");
         addPatientButton.addStyleName("primary");
+        addPatientButton.addStyleName("add-button");
         addPatientButton.addClickListener(click -> {
             patientsService.getCurrentPatient().onNext(Optional.of(new Patient()));
         });
 
         patientsGrid = new Grid<>();
+        patientsGrid.addStyleName("patients-grid");
         patientsGrid.setSizeFull();
         addComponents(detailsView, addPatientButton, patientsGrid);
     }

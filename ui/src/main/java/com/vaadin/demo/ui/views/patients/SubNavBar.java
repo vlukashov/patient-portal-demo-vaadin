@@ -25,7 +25,7 @@ class SubNavBar extends NavBar {
         setWidth("100%");
         setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
-        NativeButton backButton = new NativeButton("All patients", click -> patientsService.getCurrentPatient().onNext(Optional.empty()));
+        NativeButton backButton = new NativeButton("All patients", click -> navigator.close());
         backButton.setIcon(VaadinIcons.ARROW_LONG_LEFT);
         backButton.addStyleName("back-button");
 

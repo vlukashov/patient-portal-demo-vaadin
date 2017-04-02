@@ -21,9 +21,11 @@ public class SubViewNavigator {
     private String fallback;
     private String activePath;
     private Map<String, String> activeParams = new HashMap<>();
+    private PatientsService patientsService;
 
     @Autowired
     public SubViewNavigator(PatientsService patientsService) {
+        this.patientsService = patientsService;
 
         patientsService.getCurrentPatient().subscribe(patient -> {
             patient.ifPresent(p -> {
@@ -138,4 +140,8 @@ public class SubViewNavigator {
         }
     }
 
+    public void close() {
+        patientsService.getCurrentPatient().onNext(Optional.empty());
+        Page.getCurrent().setUriFragment(prefix, false);
+    }
 }

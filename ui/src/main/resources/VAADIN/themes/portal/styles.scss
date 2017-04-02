@@ -9,21 +9,20 @@ $v-font-color: #434D54;
 $font-green: #9DD22D;
 $danger-pink: #FF5DBA;
 
-$v-included-components:
-  verticallayout,
-  label,
-  nativebutton,
-  textfield,
-  textarea,
-  passwordfield,
-  button,
-  csslayout,
-  grid,
-  formlayout,
-  tabsheet,
-  popupdatefield,
-  combobox,
-  datefield;
+$v-included-components: verticallayout,
+label,
+nativebutton,
+textfield,
+textarea,
+passwordfield,
+button,
+csslayout,
+grid,
+formlayout,
+tabsheet,
+popupdatefield,
+combobox,
+datefield;
 
 .portal {
   @include valo;
@@ -73,6 +72,21 @@ $v-included-components:
         background: #fff;
         color: #9DD22D;
       }
+    }
+  }
+
+  .patients-view {
+    display: flex;
+    flex-direction: column;
+
+    .add-button {
+      margin-bottom: 16px;
+      margin-right: 16px;
+      align-self: flex-end;
+    }
+
+    .patients-grid {
+      flex: 1;
     }
   }
 

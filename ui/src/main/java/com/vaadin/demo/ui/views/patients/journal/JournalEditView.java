@@ -21,11 +21,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.util.Date;
+import java.util.Map;
 
 @SpringComponent
 @ViewScope
 public class JournalEditView extends VerticalLayoutView implements SubView {
-
+    public static final String VIEW_NAME = ":id/journal/edit";
     private final DoctorRepository doctorRepository;
     private final PatientsService patientsService;
     private final SubViewNavigator navigator;
@@ -48,7 +49,7 @@ public class JournalEditView extends VerticalLayoutView implements SubView {
     private void buildLayout() {
         setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
-        SubViewHeader header = new SubViewHeader(navigator, getTitle(), "journal");
+        SubViewHeader header = new SubViewHeader(navigator, getTitle(), JournalListingView.VIEW_NAME);
         editorLayout = new JournalEditLayout();
         NativeButton saveButton = new NativeButton("Save");
         saveButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
@@ -64,15 +65,22 @@ public class JournalEditView extends VerticalLayoutView implements SubView {
                 JournalEntry entry = binder.getBean();
                 binder.writeBean(entry);
                 patientsService.addJournalEntry(entry);
-                navigator.navigateTo("journal");
+                navigator.navigateToPath("journal");
 
             } catch (ValidationException e) {
                 Notification.show("Save failed", Notification.Type.WARNING_MESSAGE);
             }
         });
-        cancelButton.addClickListener(click -> navigator.navigateTo("journal"));
+        cancelButton.addClickListener(click -> navigator.navigateToPath("journal"));
 
         addComponents(header, editorLayout, new HorizontalLayout(saveButton, cancelButton));
+    }
+
+    @Override
+    public void enter(Map<String, String> params) {
+        if(params.containsKey("id")){
+            patientsService.selectPatient(Long.valueOf(params.get("id")));
+        }
     }
 
     @Override
@@ -87,12 +95,6 @@ public class JournalEditView extends VerticalLayoutView implements SubView {
         entry.setPatient(patient);
         entry.setDate(new Date());
         binder.setBean(entry);
-    }
-
-
-    @Override
-    public String getUrl() {
-        return "journal/new";
     }
 
     @Override

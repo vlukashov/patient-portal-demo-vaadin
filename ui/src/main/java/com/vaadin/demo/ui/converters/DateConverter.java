@@ -17,6 +17,9 @@ public class DateConverter implements Converter<LocalDate, Date> {
 
     @Override
     public LocalDate convertToPresentation(Date value, ValueContext context) {
+        if (value == null) {
+            value = new Date();
+        }
         return new Date(value.getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 }

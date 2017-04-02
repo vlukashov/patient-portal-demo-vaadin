@@ -19,11 +19,12 @@ import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
+import java.util.Map;
 
 @SpringComponent
 @ViewScope
 public class ProfileEditView extends VerticalLayoutView implements SubView {
-
+    public static final String VIEW_NAME = ":id/profile/edit";
     private DoctorRepository doctorRepository;
     private PatientsService patientsService;
     private SubViewNavigator navigator;
@@ -44,6 +45,13 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
     }
 
     @Override
+    public void enter(Map<String, String> params) {
+        if(params.containsKey("id")){
+            patientsService.selectPatient(Long.valueOf(params.get("id")));
+        }
+    }
+
+    @Override
     public void attach() {
         super.attach();
         addSubscription(patientsService.getCurrentPatient().subscribe(p -> p.ifPresent(this::updateFromPatient)));
@@ -55,7 +63,7 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
 
     private void buildLayout() {
         setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-        SubViewHeader header = new SubViewHeader(navigator, getTitle(), "profile");
+        SubViewHeader header = new SubViewHeader(navigator, getTitle(), ProfileView.VIEW_NAME);
         PatientFormLayout formLayout = new PatientFormLayout();
         formLayout.setWidth("80%");
 
@@ -79,17 +87,12 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
             }
         });
 
-        cancelButton.addClickListener(click -> navigator.navigateTo("profile"));
+        cancelButton.addClickListener(click -> navigator.navigateToPath("profile"));
         deleteButton.addClickListener(click -> {
             patientsService.deleteCurrentPatient();
         });
 
         addComponents(header, formLayout, new HorizontalLayout(saveButton, cancelButton, deleteButton));
-    }
-
-    @Override
-    public String getUrl() {
-        return "profile/edit";
     }
 
     @Override

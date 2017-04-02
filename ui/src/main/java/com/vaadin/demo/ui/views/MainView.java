@@ -47,9 +47,7 @@ public class MainView extends VerticalLayout implements ViewDisplay {
     private void setupNavigator() {
         Navigator navigator = getUI().getNavigator();
 
-        if (!navigator.getState().isEmpty()) {
-            navigator.navigateTo(navigator.getState());
-        } else {
+        if (navigator.getState().isEmpty()) {
             navigator.navigateTo("patients");
         }
     }

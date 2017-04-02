@@ -15,10 +15,14 @@ import com.vaadin.ui.Label;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 @SpringComponent
 @ViewScope
 public class ProfileView extends CssLayoutView implements SubView {
+    public static final String VIEW_NAME = ":id/profile";
 
     private final PatientsService patientsService;
     private final NameLayout nameLayout;
@@ -39,8 +43,10 @@ public class ProfileView extends CssLayoutView implements SubView {
     }
 
     @Override
-    public String getUrl() {
-        return "profile";
+    public void enter(Map<String, String> params) {
+        if(params.containsKey("id")){
+            patientsService.selectPatient(Long.valueOf(params.get("id")));
+        }
     }
 
     @Override

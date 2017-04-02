@@ -11,7 +11,6 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.CssLayout;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 
 
 @SpringComponent
@@ -29,15 +28,21 @@ public class PatientDetailsView extends CssLayoutView {
         addStyleName("patient-details-view");
 
         this.patientsService = patientsService;
-
-        SubNavBar navBar = new SubNavBar(navigator);
-        addComponent(navBar);
         content = new CssLayout();
+
+        SubNavBar navBar = new SubNavBar(navigator, patientsService);
+        addComponent(navBar);
         content.setSizeFull();
         addComponent(content);
 
-        navigator.addViews(profileView, profileEditView, journalListingView, journalEditView);
-        navigator.getViewSubject().subscribe(view -> {
+        navigator.addView(ProfileView.VIEW_NAME, profileView);
+        navigator.addView(ProfileEditView.VIEW_NAME, profileEditView);
+        navigator.addView(JournalListingView.VIEW_NAME, journalListingView);
+        navigator.addView(JournalEditView.VIEW_NAME, journalEditView);
+        navigator.addView("new", profileEditView);
+        navigator.setFallback(ProfileView.VIEW_NAME);
+
+        navigator.viewChanges().subscribe(view -> {
             content.removeAllComponents();
             content.addComponent(view);
             Page.getCurrent().setTitle(view.getTitle());
@@ -58,11 +63,13 @@ public class PatientDetailsView extends CssLayoutView {
     private void setVisibility(boolean hasPatient) {
         if (hasPatient) {
             addStyleName("open");
-            navigator.initFromUri("profile");
         } else {
             removeStyleName("open");
         }
     }
 
 
+    public void initFromParams(String prefix, String parameters) {
+        navigator.init(prefix, parameters);
+    }
 }

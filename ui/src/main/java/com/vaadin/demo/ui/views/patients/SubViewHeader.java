@@ -14,7 +14,7 @@ public class SubViewHeader extends HorizontalLayout {
         Label text = new Label(heading);
         text.addStyleName(ValoTheme.LABEL_H1);
         NativeButton close = new NativeButton();
-        close.addClickListener(click -> navigator.navigateTo(closeLink));
+        close.addClickListener(click -> navigator.navigateToPath(closeLink));
         close.setIcon(VaadinIcons.CLOSE);
 
         setWidth("100%");

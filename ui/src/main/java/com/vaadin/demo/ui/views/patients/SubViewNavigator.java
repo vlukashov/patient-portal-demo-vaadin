@@ -4,80 +4,138 @@ import com.vaadin.demo.ui.service.PatientsService;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.PublishSubject;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.PreDestroy;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @SpringComponent
 @ViewScope
 public class SubViewNavigator {
-    private final PatientsService patientsService;
-    private final Disposable subscription;
-    private Set<SubView> views = new HashSet<>();
+    private Map<String, SubView> viewMap = new HashMap<>();
     private PublishSubject<SubView> viewSubject = PublishSubject.create();
 
     private String prefix;
-    private Long id;
-    private String currentUrl;
+    private String fallback;
+    private String activePath;
+    private Map<String, String> activeParams = new HashMap<>();
 
     @Autowired
-    SubViewNavigator(PatientsService patientsService) {
-        this.patientsService = patientsService;
+    public SubViewNavigator(PatientsService patientsService) {
 
-        subscription = patientsService.getCurrentPatient().subscribe(p -> {
-            p.ifPresent(patient -> id = patient.getId());
-            if (prefix != null && currentUrl != null) {
-                navigateTo(currentUrl);
+        patientsService.getCurrentPatient().subscribe(patient -> {
+            patient.ifPresent(p -> {
+                activeParams.put("id", p.getId().toString());
+                navigateToPath(activePath);
+            });
+        });
+
+    }
+
+    public void setFallback(String fallback) {
+        this.fallback = fallback;
+    }
+
+    public void addView(String pattern, SubView view) {
+        viewMap.put(pattern, view);
+    }
+
+    /**
+     * Navigate to a pattern and fill in the blanks from the current state params.
+     *
+     * @param pattern
+     */
+    public void navigateToPath(String pattern) {
+        SubView view = viewMap.get(pattern);
+        view.enter(activeParams);
+        viewSubject.onNext(view);
+
+        String url = pattern;
+        for (Map.Entry<String, String> params : activeParams.entrySet()) {
+            url = pattern.replaceAll(":" + params.getKey(), params.getValue());
+        }
+        updateUriFragment(url);
+        activePath = pattern;
+    }
+
+    /**
+     * Navigate to a url like '12/profile/edit' and populate current state based on params.
+     *
+     * @param path
+     */
+    public void navigateByUrl(String path) {
+        // find view based on pattern
+        viewMap.keySet().stream().filter(pattern -> path.matches(getRegex(pattern))).findFirst().ifPresent(pattern -> {
+            activePath = pattern;
+
+            // extract view params
+            String regex = getRegex(pattern);
+            Matcher matcher = Pattern.compile(regex).matcher(path);
+
+            activeParams = new HashMap<>();
+
+            if (matcher.find()) {
+                // How the fuck is there not a way of getting the collection of matched groups from Matcher?
+                Matcher lol = Pattern.compile(":(\\w+)").matcher(pattern);
+                while (lol.find()) {
+                    String group = lol.group().substring(1);
+                    activeParams.put(group, matcher.group(group));
+                }
             }
+
+            // call enter on view with params, show view
+            SubView view = viewMap.get(pattern);
+            view.enter(activeParams);
+            viewSubject.onNext(view);
+
+            // update path
+            updateUriFragment(path);
         });
     }
 
-    public void addViews(SubView... subViews) {
-        views.addAll(Arrays.asList(subViews));
+    /**
+     * Turn simplified pattern into regular expression
+     *
+     * @param pattern
+     * @return
+     */
+    private String getRegex(String pattern) {
+        String regex = pattern.replaceAll(":(\\w+)", "(?<$1>\\\\w+)");
+        regex = "^" + regex + "$";
+        return regex;
     }
 
-    public void navigateTo(String url) {
-        currentUrl = url;
-        views.stream().filter(v -> v.getUrl().equals(url)).findFirst().ifPresent(view -> viewSubject.onNext(view));
-        Page.getCurrent().setUriFragment(prefix + "/" + id + "/" + url, false);
+    private void updateUriFragment(String url) {
+        String fragment = prefix + "/" + url;
+        System.out.println("Setting URI Fragment: " + fragment);
+        Page.getCurrent().setUriFragment(fragment, false);
     }
 
-    public void close() {
-        patientsService.getCurrentPatient().onNext(Optional.empty());
-        Page.getCurrent().setUriFragment(prefix, false);
+    public boolean isActive(String viewName) {
+        return activePath != null && viewName.equals(activePath);
     }
 
-    public PublishSubject<SubView> getViewSubject() {
+    public PublishSubject<SubView> viewChanges() {
         return viewSubject;
     }
 
-    public void initFromUri(String fallback) {
-        List<String> parts = new LinkedList<>(Arrays.asList(Page.getCurrent().getUriFragment().split("/")));
+    /**
+     * Initialize navigation state from current page URI fragment
+     *
+     * @param prefix
+     * @param parameters
+     */
+    public void init(String prefix, String parameters) {
 
+        this.prefix = prefix;
 
-        if (parts.size() > 0) {
-            prefix = parts.get(0);
-            parts.remove(0);
-        }
-
-        if (parts.size() > 0) {
-            id = Long.valueOf(parts.get(0));
-            parts.remove(0);
-            patientsService.selectPatient(id);
-        }
-
-        if (parts.size() > 0) {
-            navigateTo(String.join("/", parts));
+        if (!parameters.isEmpty()) {
+            navigateByUrl(parameters);
         } else {
-            navigateTo(fallback);
+            activePath = fallback;
         }
     }
 
-    @PreDestroy
-    void unsubscribe() {
-        subscription.dispose();
-    }
 }

@@ -17,8 +17,8 @@ import java.util.Optional;
 @ViewScope
 public class PatientsService {
 
-    private BehaviorSubject<List<Patient>> patients;
-    private BehaviorSubject<Optional<Patient>> currentPatient;
+    private BehaviorSubject<List<Patient>> patients = BehaviorSubject.create();
+    private BehaviorSubject<Optional<Patient>> currentPatient = BehaviorSubject.create();
     private PatientRepository repo;
 
     private PatientService patientService;
@@ -31,9 +31,7 @@ public class PatientsService {
 
     @PostConstruct
     void init() {
-        patients = BehaviorSubject.create();
-        currentPatient = BehaviorSubject.create();
-        currentPatient.subscribe(p-> System.out.println("Patients service: " + p));
+        currentPatient.subscribe(p -> System.out.println("Patients service: " + p));
     }
 
     public BehaviorSubject<Optional<Patient>> getCurrentPatient() {
@@ -52,7 +50,15 @@ public class PatientsService {
     }
 
     public void selectPatient(Long id) {
-        currentPatient.onNext(Optional.of(repo.findOne(id)));
+        if (currentPatient.getValue().isPresent()) {
+            currentPatient.getValue().ifPresent(p -> {
+                if (!p.getId().equals(id)) {
+                    currentPatient.onNext(Optional.of(repo.findOne(id)));
+                }
+            });
+        } else {
+            currentPatient.onNext(Optional.of(repo.findOne(id)));
+        }
     }
 
     public void savePatient(Patient p) {
@@ -67,7 +73,7 @@ public class PatientsService {
     }
 
     public void addJournalEntry(JournalEntry entry) {
-        currentPatient.getValue().ifPresent(patient->{
+        currentPatient.getValue().ifPresent(patient -> {
             Patient attached = patientService.findAttached(patient);
             attached.getJournalEntries().add(0, entry);
             savePatient(attached);

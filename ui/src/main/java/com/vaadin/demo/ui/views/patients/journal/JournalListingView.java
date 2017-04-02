@@ -19,20 +19,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Map;
 
 @SpringComponent
 @ViewScope
 public class JournalListingView extends VerticalLayoutView implements SubView, Responsive {
+    public static final String VIEW_NAME = ":id/journal";
     private final PatientsService patientsService;
     private PatientService patientService;
     private SubViewNavigator navigator;
     private Grid<JournalEntry> journalGrid;
     private Label nameLabel;
-
-    @Override
-    public String getUrl() {
-        return "journal";
-    }
 
     @Override
     public String getTitle() {
@@ -53,6 +50,13 @@ public class JournalListingView extends VerticalLayoutView implements SubView, R
 
         addHeaderLayout();
         addGrid();
+    }
+
+    @Override
+    public void enter(Map<String, String> params) {
+        if(params.containsKey("id")){
+            patientsService.selectPatient(Long.valueOf(params.get("id")));
+        }
     }
 
     @Override
@@ -78,7 +82,7 @@ public class JournalListingView extends VerticalLayoutView implements SubView, R
         headerLayout.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
         nameLabel = new Label();
         nameLabel.addStyleName(ValoTheme.LABEL_H2);
-        Button addButton = new NativeButton("New Entry", click -> navigator.navigateTo("journal/new"));
+        Button addButton = new NativeButton("New Entry", click -> navigator.navigateToPath(JournalEditView.VIEW_NAME));
         addButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
         addButton.setIcon(VaadinIcons.PLUS);
         headerLayout.addComponentsAndExpand(nameLabel);

@@ -57,10 +57,8 @@ public class PatientsView extends CssLayoutView implements View, Responsive {
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         Page.getCurrent().setTitle("Patients");
 
-        String[] params = event.getParameters().split("/");
-        if (params.length > 0 && params[0].matches("\\d+")) {
-            patientsService.selectPatient(Long.valueOf(params[0]));
-        }
+        System.out.println("Patients view entered: '" + event.getParameters() + "'");
+        detailsView.initFromParams("!patients", event.getParameters());
     }
 
     @Override

@@ -5,7 +5,9 @@ import com.vaadin.demo.entities.Patient;
 import com.vaadin.demo.ui.service.PatientsService;
 import com.vaadin.demo.ui.views.base.CssLayoutView;
 import com.vaadin.demo.ui.views.patients.SubView;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.ExternalResource;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.FormLayout;
@@ -44,7 +46,7 @@ public class ProfileView extends CssLayoutView implements SubView {
 
     @Override
     public void enter(Map<String, String> params) {
-        if(params.containsKey("id")){
+        if (params.containsKey("id")) {
             patientsService.selectPatient(Long.valueOf(params.get("id")));
         }
     }
@@ -70,7 +72,11 @@ public class ProfileView extends CssLayoutView implements SubView {
     private void updateFromPatient(Patient patient) {
         nameLayout.update(patient);
         detailsLayout.update(patient);
-        picture.setSource(new ExternalResource(patient.getPictureUrl()));
+        if (patient.getPictureUrl() != null) {
+            picture.setSource(new ExternalResource(patient.getPictureUrl()));
+        } else {
+            picture.setSource(new ThemeResource("img/default-user.png"));
+        }
     }
 
 

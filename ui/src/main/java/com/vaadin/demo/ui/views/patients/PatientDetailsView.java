@@ -72,4 +72,5 @@ public class PatientDetailsView extends CssLayoutView {
     public void initFromParams(String prefix, String parameters) {
         navigator.init(prefix, parameters);
     }
+
 }

@@ -7,6 +7,7 @@ import com.vaadin.demo.entities.Gender;
 import com.vaadin.demo.entities.Patient;
 import com.vaadin.demo.repositories.DoctorRepository;
 import com.vaadin.demo.ui.converters.DateConverter;
+import com.vaadin.demo.ui.converters.LongConverter;
 import com.vaadin.demo.ui.service.PatientsService;
 import com.vaadin.demo.ui.views.base.VerticalLayoutView;
 import com.vaadin.demo.ui.views.patients.SubView;
@@ -48,6 +49,8 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
     public void enter(Map<String, String> params) {
         if(params.containsKey("id")){
             patientsService.selectPatient(Long.valueOf(params.get("id")));
+        } else {
+            updateFromPatient(new Patient());
         }
     }
 
@@ -69,6 +72,7 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
 
         binder = new BeanValidationBinder<>(Patient.class);
         binder.forField(formLayout.birthDate).withConverter(new DateConverter()).bind("birthDate");
+        binder.forField(formLayout.medicalRecord).withConverter(new LongConverter()).bind("medicalRecord");
         binder.bindInstanceFields(formLayout);
 
 
@@ -82,6 +86,7 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
             try {
                 binder.writeBean(binder.getBean());
                 patientsService.savePatient(binder.getBean());
+                navigator.navigateToPath(ProfileView.VIEW_NAME);
             } catch (ValidationException e) {
                 Notification.show("Save failed", Notification.Type.WARNING_MESSAGE);
             }
@@ -116,6 +121,7 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
         private final DateField birthDate;
         private final TextField ssn;
         private final ComboBox<Doctor> doctor;
+        private final TextField medicalRecord;
 
         PatientFormLayout() {
 
@@ -132,13 +138,14 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
             gender.setEmptySelectionAllowed(false);
 
             birthDate = new DateField("Date of Birth");
+            medicalRecord = new TextField("Medical Record");
             ssn = new TextField("SSN");
 
             doctor = new ComboBox<>("Doctor");
             doctor.setItems(doctorRepository.findAll());
             doctor.setEmptySelectionAllowed(false);
 
-            addComponents(title, firstName, middleName, lastName, gender, birthDate, ssn, doctor);
+            addComponents(title, firstName, middleName, lastName, gender, birthDate, medicalRecord, ssn, doctor);
             iterator().forEachRemaining(c -> c.setWidth("100%"));
         }
     }

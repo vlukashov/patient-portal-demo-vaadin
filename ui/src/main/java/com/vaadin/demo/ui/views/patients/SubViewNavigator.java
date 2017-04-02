@@ -29,8 +29,14 @@ public class SubViewNavigator {
 
         patientsService.getCurrentPatient().subscribe(patient -> {
             patient.ifPresent(p -> {
-                activeParams.put("id", p.getId().toString());
-                navigateToPath(activePath);
+                Long id = p.getId();
+                if(id != null && !id.toString().equals(activeParams.get("id"))) {
+                    activeParams.put("id", id.toString());
+                    navigateToPath(activePath);
+                } else {
+                    activeParams.remove("id");
+                    navigateToPath("new");
+                }
             });
         });
 
@@ -52,6 +58,7 @@ public class SubViewNavigator {
     public void navigateToPath(String pattern) {
         SubView view = viewMap.get(pattern);
         view.enter(activeParams);
+        activePath = pattern;
         viewSubject.onNext(view);
 
         String url = pattern;
@@ -59,7 +66,6 @@ public class SubViewNavigator {
             url = pattern.replaceAll(":" + params.getKey(), params.getValue());
         }
         updateUriFragment(url);
-        activePath = pattern;
     }
 
     /**

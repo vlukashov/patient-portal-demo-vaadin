@@ -1,25 +1,25 @@
 package com.vaadin.demo.ui.views.patients;
 
-import com.vaadin.demo.ui.service.PatientsService;
-import com.vaadin.demo.ui.views.base.NavBar;
-import com.vaadin.demo.ui.views.patients.journal.JournalEditView;
 import com.vaadin.demo.ui.views.patients.journal.JournalListingView;
 import com.vaadin.demo.ui.views.patients.profile.ProfileEditView;
 import com.vaadin.demo.ui.views.patients.profile.ProfileView;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.NativeButton;
 import io.reactivex.disposables.Disposable;
 
-import java.util.Optional;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-class SubNavBar extends NavBar {
+class SubNavBar extends HorizontalLayout {
 
     private SubViewNavigator navigator;
     private Disposable subscription;
+    private Map<String, Button> navButtons = new LinkedHashMap<>();
 
-    SubNavBar(SubViewNavigator navigator, PatientsService patientsService) {
+    SubNavBar(SubViewNavigator navigator) {
         this.navigator = navigator;
         addStyleName("sub-nav-bar");
         setWidth("100%");

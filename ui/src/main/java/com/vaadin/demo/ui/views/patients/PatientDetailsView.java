@@ -30,7 +30,7 @@ public class PatientDetailsView extends CssLayoutView {
         this.patientsService = patientsService;
         content = new CssLayout();
 
-        SubNavBar navBar = new SubNavBar(navigator, patientsService);
+        SubNavBar navBar = new SubNavBar(navigator);
         addComponent(navBar);
         content.setSizeFull();
         addComponent(content);

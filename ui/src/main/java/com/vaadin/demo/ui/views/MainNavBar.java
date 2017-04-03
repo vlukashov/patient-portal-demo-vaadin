@@ -1,14 +1,19 @@
 package com.vaadin.demo.ui.views;
 
-import com.vaadin.demo.ui.views.base.NavBar;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Registration;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.NativeButton;
 
-class MainNavBar extends NavBar {
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+class MainNavBar extends HorizontalLayout {
     private Registration registration;
+    private Map<String, Button> navButtons = new LinkedHashMap<>();
 
     MainNavBar() {
         addStyleName("main-nav");

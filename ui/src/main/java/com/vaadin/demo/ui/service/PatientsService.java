@@ -29,11 +29,6 @@ public class PatientsService {
         this.patientService = patientService;
     }
 
-    @PostConstruct
-    void init() {
-        currentPatient.subscribe(p -> System.out.println("Patients service: " + p));
-    }
-
     public BehaviorSubject<Optional<Patient>> getCurrentPatient() {
         if (!currentPatient.hasValue()) {
             currentPatient.onNext(Optional.empty());

@@ -117,7 +117,6 @@ public class SubViewNavigator {
 
     private void updateUriFragment(String url) {
         String fragment = prefix + "/" + url;
-        System.out.println("Setting URI Fragment: " + fragment);
         Page.getCurrent().setUriFragment(fragment, false);
     }
 

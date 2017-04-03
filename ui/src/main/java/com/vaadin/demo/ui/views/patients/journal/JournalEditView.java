@@ -49,7 +49,7 @@ public class JournalEditView extends VerticalLayoutView implements SubView {
     private void buildLayout() {
         setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
-        SubViewHeader header = new SubViewHeader(navigator, getTitle(), JournalListingView.VIEW_NAME);
+        SubViewHeader header = new SubViewHeader(navigator, getTitle(), close -> navigator.navigateToPath(JournalListingView.VIEW_NAME));
         editorLayout = new JournalEditLayout();
         NativeButton saveButton = new NativeButton("Save");
         saveButton.addStyleName(ValoTheme.BUTTON_PRIMARY);

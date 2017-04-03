@@ -30,6 +30,8 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
     private PatientsService patientsService;
     private SubViewNavigator navigator;
     private BeanValidationBinder<Patient> binder;
+    private NativeButton deleteButton;
+    private Patient patient;
 
     @Autowired
     public ProfileEditView(DoctorRepository doctorRepository, PatientsService patientsService, SubViewNavigator navigator) {
@@ -47,7 +49,7 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
 
     @Override
     public void enter(Map<String, String> params) {
-        if(params.containsKey("id")){
+        if (params.containsKey("id")) {
             patientsService.selectPatient(Long.valueOf(params.get("id")));
         } else {
             updateFromPatient(new Patient());
@@ -61,12 +63,15 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
     }
 
     private void updateFromPatient(Patient patient) {
+        this.patient = patient;
+
         binder.setBean(patient);
+        deleteButton.setVisible(patient.getId() != null);
     }
 
     private void buildLayout() {
         setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-        SubViewHeader header = new SubViewHeader(navigator, getTitle(), ProfileView.VIEW_NAME);
+        SubViewHeader header = new SubViewHeader(navigator, getTitle(), close -> backOrClose());
         PatientFormLayout formLayout = new PatientFormLayout();
         formLayout.setWidth("80%");
 
@@ -79,7 +84,7 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
         NativeButton saveButton = new NativeButton("Save");
         saveButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
         NativeButton cancelButton = new NativeButton("Cancel");
-        NativeButton deleteButton = new NativeButton("Delete");
+        deleteButton = new NativeButton("Delete");
         deleteButton.addStyleName(ValoTheme.BUTTON_DANGER);
 
         saveButton.addClickListener(click -> {
@@ -92,12 +97,22 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
             }
         });
 
-        cancelButton.addClickListener(click -> navigator.navigateToPath(ProfileView.VIEW_NAME));
+        cancelButton.addClickListener(click -> {
+            backOrClose();
+        });
         deleteButton.addClickListener(click -> {
             patientsService.deleteCurrentPatient();
         });
 
         addComponents(header, formLayout, new HorizontalLayout(saveButton, cancelButton, deleteButton));
+    }
+
+    private void backOrClose() {
+        if(patient.getId() != null) {
+            navigator.navigateToPath(ProfileView.VIEW_NAME);
+        } else {
+            navigator.close();
+        }
     }
 
     @Override

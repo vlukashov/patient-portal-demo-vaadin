@@ -71,7 +71,7 @@ public class JournalEditView extends VerticalLayoutView implements SubView {
                 Notification.show("Save failed", Notification.Type.WARNING_MESSAGE);
             }
         });
-        cancelButton.addClickListener(click -> navigator.navigateToPath("journal"));
+        cancelButton.addClickListener(click -> navigator.navigateToPath(JournalListingView.VIEW_NAME));
 
         addComponents(header, editorLayout, new HorizontalLayout(saveButton, cancelButton));
     }

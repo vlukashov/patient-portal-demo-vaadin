@@ -30,10 +30,10 @@ public class SubViewNavigator {
         patientsService.getCurrentPatient().subscribe(patient -> {
             patient.ifPresent(p -> {
                 Long id = p.getId();
-                if(id != null && !id.toString().equals(activeParams.get("id"))) {
+                if (id != null && !id.toString().equals(activeParams.get("id"))) {
                     activeParams.put("id", id.toString());
                     navigateToPath(activePath);
-                } else {
+                } else if (id == null) {
                     activeParams.remove("id");
                     navigateToPath("new");
                 }

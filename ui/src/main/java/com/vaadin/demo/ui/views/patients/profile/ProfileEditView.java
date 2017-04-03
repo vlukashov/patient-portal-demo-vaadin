@@ -92,7 +92,7 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
             }
         });
 
-        cancelButton.addClickListener(click -> navigator.navigateToPath("profile"));
+        cancelButton.addClickListener(click -> navigator.navigateToPath(ProfileView.VIEW_NAME));
         deleteButton.addClickListener(click -> {
             patientsService.deleteCurrentPatient();
         });

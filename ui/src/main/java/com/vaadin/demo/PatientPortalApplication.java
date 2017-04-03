@@ -16,7 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
-public class VaadinPatientPortalApplication {
+public class PatientPortalApplication {
 
     @Bean
     CommandLineRunner init(DBInitService service) {
@@ -46,7 +46,7 @@ public class VaadinPatientPortalApplication {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(VaadinPatientPortalApplication.class, args);
+        SpringApplication.run(PatientPortalApplication.class, args);
     }
 
 }

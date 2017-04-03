@@ -27,7 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @Theme("portal")
 @Viewport("width=device-width, initial-scale=1")
 @Widgetset("com.vaadin.demo.ui.PatientPortalWidgetSet")
-public class VaadinUI extends UI {
+public class PatientPortalUI extends UI {
 
     @Autowired
     private AuthenticationManager authenticationManager;

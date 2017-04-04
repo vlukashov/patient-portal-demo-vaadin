@@ -24,23 +24,23 @@ public class OptimizedConnectorBundleLoaderFactory extends
 
     private Set<String> deferredConnectors = new HashSet<String>();
     {
-        eagerConnectors.add(com.vaadin.client.connectors.grid.DetailsManagerConnector.class.getName());
-        eagerConnectors.add(com.vaadin.client.connectors.grid.TextRendererConnector.class.getName());
-        eagerConnectors.add(com.vaadin.client.connectors.grid.ColumnConnector.class.getName());
-        eagerConnectors.add(com.vaadin.client.connectors.grid.GridConnector.class.getName());
-        eagerConnectors.add(com.vaadin.client.connectors.grid.EditorConnector.class.getName());
-        eagerConnectors.add(com.vaadin.client.ui.orderedlayout.HorizontalLayoutConnector.class.getName());
-        eagerConnectors.add(com.vaadin.client.connectors.grid.SingleSelectionModelConnector.class.getName());
-        eagerConnectors.add(com.vaadin.client.ui.csslayout.CssLayoutConnector.class.getName());
-        eagerConnectors.add(com.vaadin.client.connectors.data.DataCommunicatorConnector.class.getName());
-        eagerConnectors.add(com.vaadin.client.ui.tabsheet.TabsheetConnector.class.getName());
-        eagerConnectors.add(com.vaadin.addon.charts.shared.ChartConnector.class.getName());
-        eagerConnectors.add(com.vaadin.client.ui.image.ImageConnector.class.getName());
-        eagerConnectors.add(com.vaadin.client.ui.formlayout.FormLayoutConnector.class.getName());
-        eagerConnectors.add(com.vaadin.client.ui.datefield.PopupDateFieldConnector.class.getName());
-        eagerConnectors.add(com.vaadin.client.ui.combobox.ComboBoxConnector.class.getName());
-        eagerConnectors.add(com.vaadin.client.ui.textarea.TextAreaConnector.class.getName());
-        eagerConnectors.add(com.vaadin.client.ui.datefield.DateFieldConnector.class.getName());
+        deferredConnectors.add(com.vaadin.client.connectors.grid.DetailsManagerConnector.class.getName());
+        deferredConnectors.add(com.vaadin.client.connectors.grid.TextRendererConnector.class.getName());
+        deferredConnectors.add(com.vaadin.client.connectors.grid.ColumnConnector.class.getName());
+        deferredConnectors.add(com.vaadin.client.connectors.grid.GridConnector.class.getName());
+        deferredConnectors.add(com.vaadin.client.connectors.grid.EditorConnector.class.getName());
+        deferredConnectors.add(com.vaadin.client.ui.orderedlayout.HorizontalLayoutConnector.class.getName());
+        deferredConnectors.add(com.vaadin.client.connectors.grid.SingleSelectionModelConnector.class.getName());
+        deferredConnectors.add(com.vaadin.client.ui.csslayout.CssLayoutConnector.class.getName());
+        deferredConnectors.add(com.vaadin.client.connectors.data.DataCommunicatorConnector.class.getName());
+        deferredConnectors.add(com.vaadin.client.ui.tabsheet.TabsheetConnector.class.getName());
+        deferredConnectors.add(com.vaadin.addon.charts.shared.ChartConnector.class.getName());
+        deferredConnectors.add(com.vaadin.client.ui.image.ImageConnector.class.getName());
+        deferredConnectors.add(com.vaadin.client.ui.formlayout.FormLayoutConnector.class.getName());
+        deferredConnectors.add(com.vaadin.client.ui.datefield.PopupDateFieldConnector.class.getName());
+        deferredConnectors.add(com.vaadin.client.ui.combobox.ComboBoxConnector.class.getName());
+        deferredConnectors.add(com.vaadin.client.ui.textarea.TextAreaConnector.class.getName());
+        deferredConnectors.add(com.vaadin.client.ui.datefield.DateFieldConnector.class.getName());
     }
 
     @Override

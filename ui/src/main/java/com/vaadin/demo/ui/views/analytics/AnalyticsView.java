@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SpringComponent
 @SpringView
@@ -63,7 +64,7 @@ public class AnalyticsView extends VerticalLayout implements View {
     }
 
     private Layout getAgeChart() {
-        List<StringLongPair> data = service.getStatsByAge();
+        List<StringLongPair> data = service.getStatsByAgeGroup();
         data.sort(Comparator.comparing(StringLongPair::getGroup));
 
         return getChart("Patients bt Age", data, "Age");
@@ -75,13 +76,18 @@ public class AnalyticsView extends VerticalLayout implements View {
 
     private Layout getDoctorChart() {
 
-        return getChart("Patients per Doctor", service.getStatsByDoctor(), "Doctor");
+        List<StringLongPair> data = service.getStatsByDoctor().entrySet().stream()
+                .map(e -> new StringLongPair("Dr. " + e.getKey().getLastName(), e.getValue()))
+                .collect(Collectors.toList());
+
+        return getChart("Patients per Doctor", data, "Doctor");
     }
 
     private Layout getChart(String title, List<StringLongPair> data, String caption) {
         Chart chart = new Chart(ChartType.COLUMN);
         chart.getConfiguration().setTitle(title);
         DataSeries ds = new DataSeries();
+        ds.setName("Patients");
         data.forEach(d -> ds.add(new DataSeriesItem(d.getGroup(), d.getCount())));
         chart.getConfiguration().addSeries(ds);
         chart.getConfiguration().getxAxis().setType(AxisType.CATEGORY);

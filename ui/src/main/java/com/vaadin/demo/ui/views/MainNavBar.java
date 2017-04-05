@@ -39,9 +39,15 @@ class MainNavBar extends HorizontalLayout {
         });
     }
 
+    private void putNavButton(String viewName, String caption) {
+        NativeButton button = new NativeButton(caption);
+        button.setId("nav-button-" + viewName);
+        navButtons.put(viewName, button);
+    }
+
     private void setupView() {
-        navButtons.put("patients", new NativeButton("Patients"));
-        navButtons.put("analytics", new NativeButton("Analytics"));
+        putNavButton("patients", "Patients");
+        putNavButton("analytics", "Analytics");
 
         navButtons.forEach((name, button) -> {
             button.addStyleName("link");
@@ -53,6 +59,7 @@ class MainNavBar extends HorizontalLayout {
             Page.getCurrent().reload();
             getSession().close();
         });
+        logout.setId("nav-logout");
         logout.addStyleName("link");
         logout.setIcon(VaadinIcons.SIGN_OUT);
 

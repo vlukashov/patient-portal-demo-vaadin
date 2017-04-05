@@ -47,6 +47,7 @@ public class AnalyticsView extends VerticalLayout implements View {
     @PostConstruct
     void init() {
         tabSheet = new TabSheet();
+        tabSheet.setId("analytics-tabsheet");
         tabSheet.setStyleName(ValoTheme.TABSHEET_CENTERED_TABS);
         tabSheet.addStyleName("detail-tabs");
         addComponent(tabSheet);

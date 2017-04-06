@@ -103,6 +103,7 @@ public class PatientsView extends CssLayoutView implements View, Responsive {
 
         patientsGrid.addColumn(patient -> {
             NativeButton toggleButton = new NativeButton();
+            toggleButton.setId("patient-toggle-button");
             toggleButton.setIcon(VaadinIcons.CHEVRON_RIGHT);
             toggleButton.addClickListener(click -> {
                 boolean visible = !patientsGrid.isDetailsVisible(patient);
@@ -115,6 +116,7 @@ public class PatientsView extends CssLayoutView implements View, Responsive {
         patientsGrid.addColumn(patient -> patient.getLastName() + ", " + patient.getFirstName()).setId("lastName").setCaption("Name").setExpandRatio(1);
         patientsGrid.addColumn(patient -> {
             NativeButton detailsButton = new NativeButton();
+            detailsButton.setId("patient-details-button");
             detailsButton.setIcon(VaadinIcons.ARROW_CIRCLE_RIGHT);
             detailsButton.addClickListener(click -> patientsService.getCurrentPatient().onNext(Optional.of(patient)));
             return detailsButton;

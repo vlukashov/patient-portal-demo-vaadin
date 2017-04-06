@@ -67,7 +67,7 @@ public class JournalEditView extends VerticalLayoutView implements SubView {
                 JournalEntry entry = binder.getBean();
                 binder.writeBean(entry);
                 patientsService.addJournalEntry(entry);
-                navigator.navigateToPath("journal");
+                navigator.navigateToPath(JournalListingView.VIEW_NAME);
 
             } catch (ValidationException e) {
                 Notification.show("Save failed", Notification.Type.WARNING_MESSAGE);

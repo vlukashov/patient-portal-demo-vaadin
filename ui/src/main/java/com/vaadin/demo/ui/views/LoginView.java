@@ -39,8 +39,6 @@ public class LoginView extends VerticalLayout {
             }
         });
 
-
-
         VerticalLayout loginBox = new VerticalLayout(title, usernameField, passwordField, loginButton, errorLabel);
         loginBox.addStyleName("login-box");
         loginBox.setSizeUndefined();

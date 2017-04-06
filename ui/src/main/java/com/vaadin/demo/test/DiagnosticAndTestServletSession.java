@@ -2,10 +2,10 @@ package com.vaadin.demo.test;
 
 import com.vaadin.server.*;
 import com.vaadin.ui.Component;
-;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Extends VaadinSession to help with connector IDs
@@ -13,6 +13,8 @@ import java.util.Map;
 public class DiagnosticAndTestServletSession extends VaadinSession {
 
     private Map<Class<? extends ClientConnector>, Integer> sequences = new HashMap<>();
+
+    private Map<Class<? extends Extension>, AtomicInteger> extensionSquences = new HashMap<>();
 
     public DiagnosticAndTestServletSession(VaadinService service) {
         super(service);
@@ -26,6 +28,9 @@ public class DiagnosticAndTestServletSession extends VaadinSession {
             Component component = (Component) connector;
             connectorId = component.getId() == null ? super
                     .createConnectorId(connector) : component.getId();
+        } else if(connector instanceof Extension) {
+            Extension extension = (Extension)connector;
+            connectorId = "_ext-" + extension.getClass().getSimpleName().toLowerCase() + "-" + nextId(extension.getClass());
         } else {
             connectorId = super.createConnectorId(connector);
         }
@@ -33,12 +38,13 @@ public class DiagnosticAndTestServletSession extends VaadinSession {
         return connectorId;
     }
 
-    private int nextId(Class<? extends ClientConnector> c) {
-        Integer nextid = 0;
-        if (sequences.get(c)!=null) {
-            nextid = sequences.get(c);
+    private int nextId(Class<? extends Extension> c) {
+        AtomicInteger id = extensionSquences.get(c);
+        if(id == null) {
+            id = new AtomicInteger(0);
+            extensionSquences.put(c, id);
         }
-        sequences.put(c, nextid+1);
-        return nextid;
+
+        return id.incrementAndGet();
     }
 }

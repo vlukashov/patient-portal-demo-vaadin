@@ -63,11 +63,6 @@ public class PatientPortalUI extends UI {
             // with websocket communication.
             VaadinService.reinitializeSession(VaadinService.getCurrentRequest());
             SecurityContextHolder.getContext().setAuthentication(token);
-            // Now when the session is reinitialized, we can enable websocket communication. Or we could have just
-            // used WEBSOCKET_XHR and skipped this step completely.
-            getPushConfiguration().setTransport(Transport.WEBSOCKET);
-            getPushConfiguration().setPushMode(PushMode.AUTOMATIC);
-            // Show the main UI
             showMainView();
             return true;
         } catch (AuthenticationException ex) {

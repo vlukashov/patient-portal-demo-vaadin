@@ -84,6 +84,7 @@ public class JournalListingView extends VerticalLayoutView implements SubView, R
         nameLabel = new Label();
         nameLabel.addStyleName(ValoTheme.LABEL_H2);
         Button addButton = new NativeButton("New Entry", click -> navigator.navigateToPath(JournalEditView.VIEW_NAME));
+        addButton.setId("add-journal-button");
         addButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
         addButton.setIcon(VaadinIcons.PLUS);
         headerLayout.addComponentsAndExpand(nameLabel);
@@ -93,6 +94,7 @@ public class JournalListingView extends VerticalLayoutView implements SubView, R
 
     private void addGrid() {
         journalGrid = new Grid<>();
+        journalGrid.setId("journal-grid");
         journalGrid.setSizeFull();
         addComponentsAndExpand(journalGrid);
     }

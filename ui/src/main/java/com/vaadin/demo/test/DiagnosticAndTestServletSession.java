@@ -12,9 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class DiagnosticAndTestServletSession extends VaadinSession {
 
-    private Map<Class<? extends ClientConnector>, Integer> sequences = new HashMap<>();
-
-    private Map<Class<? extends Extension>, AtomicInteger> extensionSquences = new HashMap<>();
+    private Map<Class<? extends ClientConnector>, AtomicInteger> squences = new HashMap<>();
 
     public DiagnosticAndTestServletSession(VaadinService service) {
         super(service);
@@ -24,25 +22,27 @@ public class DiagnosticAndTestServletSession extends VaadinSession {
     @Override
     public String createConnectorId(ClientConnector connector) {
         String connectorId = "";
+
         if (connector instanceof Component) {
             Component component = (Component) connector;
             connectorId = component.getId() == null ? super
                     .createConnectorId(connector) : component.getId();
-        } else if(connector instanceof Extension) {
-            Extension extension = (Extension)connector;
-            connectorId = "_ext-" + extension.getClass().getSimpleName().toLowerCase() + "-" + nextId(extension.getClass());
         } else {
-            connectorId = super.createConnectorId(connector);
+            connectorId = getGenericConnectorId(connector);
         }
 
         return connectorId;
     }
 
-    private int nextId(Class<? extends Extension> c) {
-        AtomicInteger id = extensionSquences.get(c);
+    private String getGenericConnectorId(ClientConnector connector) {
+        return "#" + connector.getClass().getSimpleName().toLowerCase() + "-" + nextId(connector.getClass());
+    }
+
+    private int nextId(Class<? extends ClientConnector> c) {
+        AtomicInteger id = squences.get(c);
         if(id == null) {
             id = new AtomicInteger(0);
-            extensionSquences.put(c, id);
+            squences.put(c, id);
         }
 
         return id.incrementAndGet();

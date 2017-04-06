@@ -13,6 +13,7 @@ import com.vaadin.demo.ui.views.base.VerticalLayoutView;
 import com.vaadin.demo.ui.views.patients.SubView;
 import com.vaadin.demo.ui.views.patients.SubViewHeader;
 import com.vaadin.demo.ui.views.patients.SubViewNavigator;
+import com.vaadin.shared.ui.ValueChangeMode;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.*;
@@ -132,6 +133,7 @@ public class JournalEditView extends VerticalLayoutView implements SubView {
             doctor.setEmptySelectionAllowed(false);
 
             entry = new TextArea("Notes");
+            entry.setValueChangeMode(ValueChangeMode.BLUR);
             entry.setId("journal-entry");
 
             FormLayout innerForm = new FormLayout(name, date, appointmentType, doctor);

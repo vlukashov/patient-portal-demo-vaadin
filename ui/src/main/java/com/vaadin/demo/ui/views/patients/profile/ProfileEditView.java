@@ -13,6 +13,7 @@ import com.vaadin.demo.ui.views.base.VerticalLayoutView;
 import com.vaadin.demo.ui.views.patients.SubView;
 import com.vaadin.demo.ui.views.patients.SubViewHeader;
 import com.vaadin.demo.ui.views.patients.SubViewNavigator;
+import com.vaadin.shared.ui.ValueChangeMode;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.*;
@@ -149,10 +150,13 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
             title.setEmptySelectionAllowed(false);
 
             firstName = new TextField("First Name");
+            firstName.setValueChangeMode(ValueChangeMode.BLUR);
             firstName.setId("firstname-textfield");
             middleName = new TextField("Middle Name");
+            middleName.setValueChangeMode(ValueChangeMode.BLUR);
             middleName.setId("middlename-textfield");
             lastName = new TextField("Last Name");
+            lastName.setValueChangeMode(ValueChangeMode.BLUR);
             lastName.setId("lastname-textfield");
 
             gender = new ComboBox<>("Gender");
@@ -163,8 +167,10 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
             birthDate = new DateField("Date of Birth");
             birthDate.setId("birthdate-datefield");
             medicalRecord = new TextField("Medical Record");
+            medicalRecord.setValueChangeMode(ValueChangeMode.BLUR);
             medicalRecord.setId("medical-record-textfield");
             ssn = new TextField("SSN");
+            ssn.setValueChangeMode(ValueChangeMode.BLUR);
             ssn.setId("ssn-textfield");
 
             doctor = new ComboBox<>("Doctor");

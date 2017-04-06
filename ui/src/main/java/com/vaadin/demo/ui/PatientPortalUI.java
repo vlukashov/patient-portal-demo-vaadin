@@ -1,5 +1,6 @@
 package com.vaadin.demo.ui;
 
+import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Viewport;
 import com.vaadin.annotations.Widgetset;
@@ -27,6 +28,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @Theme("portal")
 @Viewport("width=device-width, initial-scale=1")
 @Widgetset("com.vaadin.demo.ui.PatientPortalWidgetSet")
+@Push(transport = Transport.WEBSOCKET_XHR)
 public class PatientPortalUI extends UI {
 
     @Autowired

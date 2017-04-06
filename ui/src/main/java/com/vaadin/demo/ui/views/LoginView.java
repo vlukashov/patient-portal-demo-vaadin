@@ -1,6 +1,7 @@
 package com.vaadin.demo.ui.views;
 
 import com.vaadin.event.ShortcutAction;
+import com.vaadin.shared.ui.ValueChangeMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -18,8 +19,10 @@ public class LoginView extends VerticalLayout {
         title.addStyleName(ValoTheme.LABEL_H1);
 
         TextField usernameField = new TextField("Username");
+        usernameField.setValueChangeMode(ValueChangeMode.BLUR);
         usernameField.setId("login-username");
         PasswordField passwordField = new PasswordField("Password");
+        passwordField.setValueChangeMode(ValueChangeMode.BLUR);
         passwordField.setId("login-password");
         usernameField.setWidth("100%");
         passwordField.setWidth("100%");

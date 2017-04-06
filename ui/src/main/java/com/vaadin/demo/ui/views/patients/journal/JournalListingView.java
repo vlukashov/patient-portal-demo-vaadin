@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Map;
+import java.util.Optional;
 
 @SpringComponent
 @ViewScope
@@ -130,7 +131,9 @@ public class JournalListingView extends VerticalLayoutView implements SubView, R
         journalGrid.removeAllColumns();
         journalGrid.addColumn(entry -> SimpleDateFormat.getDateInstance().format(entry.getDate())).setCaption("Date");
         journalGrid.addColumn(entry -> entry.getAppointmentType().toString()).setCaption("Appointment");
-        journalGrid.addColumn(entry -> entry.getDoctor().toString()).setCaption("Doctor").setExpandRatio(1);
+        journalGrid.addColumn(entry -> Optional.ofNullable(entry.getDoctor()).map(d -> d.toString()).orElse("n/a"))
+                .setCaption("Doctor")
+                .setExpandRatio(1);
         journalGrid.addColumn(JournalEntry::getEntry).setCaption("Notes").setExpandRatio(1).setMaximumWidth(400);
 
         journalGrid.setDetailsGenerator(entry -> {

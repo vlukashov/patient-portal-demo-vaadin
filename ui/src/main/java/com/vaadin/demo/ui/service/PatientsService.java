@@ -51,8 +51,14 @@ public class PatientsService {
                     currentPatient.onNext(Optional.of(repo.findOne(id)));
                 }
             });
+        } else if(id != null) {
+            Patient patient = repo.findOne(id);
+            if(patient == null) {
+                System.err.println("Failed to find patient with ID " + id);
+            }
+            currentPatient.onNext(Optional.ofNullable(patient));
         } else {
-            currentPatient.onNext(Optional.of(repo.findOne(id)));
+            currentPatient.onNext(Optional.empty());
         }
     }
 

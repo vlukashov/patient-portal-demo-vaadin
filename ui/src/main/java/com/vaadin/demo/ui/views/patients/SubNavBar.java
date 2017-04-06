@@ -26,20 +26,29 @@ class SubNavBar extends HorizontalLayout {
         setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
         NativeButton backButton = new NativeButton("All patients", click -> navigator.close());
+        backButton.setId("all-patients-button");
         backButton.setIcon(VaadinIcons.ARROW_LONG_LEFT);
         backButton.addStyleName("back-button");
 
         HorizontalLayout subPagesLayout = new HorizontalLayout();
         subPagesLayout.addStyleName("sub-pages");
 
-        navButtons.put(ProfileView.VIEW_NAME, new NativeButton("Profile", click -> navigator.navigateToPath(ProfileView.VIEW_NAME)));
-        navButtons.put(JournalListingView.VIEW_NAME, new NativeButton("Journal", click -> navigator.navigateToPath(JournalListingView.VIEW_NAME)));
+        NativeButton profileButton = new NativeButton("Profile",
+                click -> navigator.navigateToPath(ProfileView.VIEW_NAME));
+        profileButton.setId("patient-profile-button");
+        navButtons.put(ProfileView.VIEW_NAME, profileButton);
+
+        NativeButton journalButton = new NativeButton("Journal",
+                click -> navigator.navigateToPath(JournalListingView.VIEW_NAME));
+        journalButton.setId("patient-journal-button");
+        navButtons.put(JournalListingView.VIEW_NAME, journalButton);
 
         navButtons.forEach((name, button) -> {
             subPagesLayout.addComponent(button);
         });
 
         NativeButton editButton = new NativeButton("Edit", click -> navigator.navigateToPath(ProfileEditView.VIEW_NAME));
+        editButton.setId("patient-edit-button");
         addComponents(backButton, subPagesLayout, editButton);
 
         setExpandRatio(subPagesLayout, 1);

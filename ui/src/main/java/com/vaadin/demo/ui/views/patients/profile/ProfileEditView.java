@@ -82,9 +82,12 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
 
 
         NativeButton saveButton = new NativeButton("Save");
+        saveButton.setId("save-nativebutton");
         saveButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
         NativeButton cancelButton = new NativeButton("Cancel");
+        cancelButton.setId("cancel-nativebutton");
         deleteButton = new NativeButton("Delete");
+        deleteButton.setId("delete-nativebutton");
         deleteButton.addStyleName(ValoTheme.BUTTON_DANGER);
 
         saveButton.addClickListener(click -> {
@@ -141,22 +144,31 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
         PatientFormLayout() {
 
             title = new ComboBox<>("Title");
+            title.setId("title-combobox");
             title.setItems("Miss", "Ms", "Mrs", "Mr");
             title.setEmptySelectionAllowed(false);
 
             firstName = new TextField("First Name");
+            firstName.setId("firstname-textfield");
             middleName = new TextField("Middle Name");
+            middleName.setId("middlename-textfield");
             lastName = new TextField("Last Name");
+            lastName.setId("lastname-textfield");
 
             gender = new ComboBox<>("Gender");
+            gender.setId("gender-combobox");
             gender.setItems(Gender.values());
             gender.setEmptySelectionAllowed(false);
 
             birthDate = new DateField("Date of Birth");
+            birthDate.setId("birthdate-datefield");
             medicalRecord = new TextField("Medical Record");
+            medicalRecord.setId("medical-record-textfield");
             ssn = new TextField("SSN");
+            ssn.setId("ssn-textfield");
 
             doctor = new ComboBox<>("Doctor");
+            doctor.setId("doctor-combobox");
             doctor.setItems(doctorRepository.findAll());
             doctor.setEmptySelectionAllowed(false);
 

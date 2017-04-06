@@ -57,6 +57,10 @@ public class SubViewNavigator {
      */
     public void navigateToPath(String pattern) {
         SubView view = viewMap.get(pattern);
+        if(view == null) {
+            System.err.println("No view find for pattern: " + pattern);
+            return;
+        }
         view.enter(activeParams);
         activePath = pattern;
         viewSubject.onNext(view);

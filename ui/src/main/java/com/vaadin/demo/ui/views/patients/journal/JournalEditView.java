@@ -52,8 +52,10 @@ public class JournalEditView extends VerticalLayoutView implements SubView {
         SubViewHeader header = new SubViewHeader(navigator, getTitle(), close -> navigator.navigateToPath(JournalListingView.VIEW_NAME));
         editorLayout = new JournalEditLayout();
         NativeButton saveButton = new NativeButton("Save");
+        saveButton.setId("journal-save-id");
         saveButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
         NativeButton cancelButton = new NativeButton("Cancel");
+        cancelButton.setId("journal-cancel-id");
         cancelButton.addStyleName(ValoTheme.BUTTON_DANGER);
 
         binder = new BeanValidationBinder<>(JournalEntry.class);
@@ -121,13 +123,16 @@ public class JournalEditView extends VerticalLayoutView implements SubView {
             name.setCaption("Name");
             date = new DateField("Date");
             appointmentType = new ComboBox<>("Appointment");
+            appointmentType.setId("journal-appointment-type-combobox");
             appointmentType.setItems(AppointmentType.values());
             appointmentType.setEmptySelectionAllowed(false);
             doctor = new ComboBox<>("Doctor");
+            doctor.setId("journal-doctor-combobox");
             doctor.setItems(doctorRepository.findAll());
             doctor.setEmptySelectionAllowed(false);
 
             entry = new TextArea("Notes");
+            entry.setId("journal-entry");
 
             FormLayout innerForm = new FormLayout(name, date, appointmentType, doctor);
             addComponents(innerForm, entry);

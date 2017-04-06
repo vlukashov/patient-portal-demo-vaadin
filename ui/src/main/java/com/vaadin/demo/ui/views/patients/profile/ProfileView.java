@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @SpringComponent
 @ViewScope
@@ -145,8 +146,8 @@ public class ProfileView extends CssLayoutView implements SubView {
             dateOfBirth.setValue(patient.getBirthDate() == null ? "" : SimpleDateFormat.getDateInstance().format(patient.getBirthDate()));
             ssn.setValue(patient.getSsn());
             patientId.setValue(patient.getId().toString());
-            doctor.setValue(patient.getDoctor().toString());
-            medicalRecord.setValue(patient.getMedicalRecord().toString());
+            doctor.setValue(Optional.ofNullable(patient.getDoctor()).map(d -> d.toString()).orElse("n/a"));
+            medicalRecord.setValue(Optional.ofNullable(patient.getMedicalRecord()).map(rm -> rm.toString()).orElse("n/a"));
             lastVisit.setValue(patient.getLastVisit() == null ? "" : SimpleDateFormat.getDateInstance().format(patient.getLastVisit()));
 
 

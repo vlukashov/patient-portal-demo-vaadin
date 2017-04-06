@@ -137,8 +137,12 @@ public class PatientsView extends CssLayoutView implements View, Responsive {
 
         patientsGrid.addColumn(patient -> patient.getLastName() + ", " + patient.getFirstName()).setId("lastName").setCaption("Name");
         patientsGrid.addColumn(patient -> patient.getId().toString()).setId("id").setCaption("Id");
-        patientsGrid.addColumn(patient -> patient.getMedicalRecord().toString()).setId("medicalRecord").setCaption("Medical record");
-        patientsGrid.addColumn(patient -> patient.getDoctor().getLastName() + ", " + patient.getDoctor().getFirstName()).setId("doctor.lastName").setCaption("Doctor");
+        patientsGrid.addColumn(patient -> Optional.ofNullable(patient.getMedicalRecord()).map(md -> md.toString()).orElse("n/a"))
+                .setId("medicalRecord")
+                .setCaption("Medical record");
+        patientsGrid.addColumn(patient ->
+            Optional.ofNullable(patient.getDoctor()).map(d -> d.getLastName() + ", " + d.getFirstName()).orElse("n/a")
+        ).setId("doctor.lastName").setCaption("Doctor");
         patientsGrid.addColumn(patient ->
                 patient.getLastVisit() == null ? "" : SimpleDateFormat.getDateInstance().format(patient.getLastVisit())
         ).setId("lastVisit").setCaption("Last visit");

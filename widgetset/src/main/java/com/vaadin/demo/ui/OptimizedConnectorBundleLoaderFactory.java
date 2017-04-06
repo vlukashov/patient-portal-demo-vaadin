@@ -51,7 +51,8 @@ public class OptimizedConnectorBundleLoaderFactory extends
         } else if (deferredConnectors.contains(connectorType.getQualifiedBinaryName())) {
             return LoadStyle.DEFERRED;
         } else {
-            return LoadStyle.LAZY;
+            // Don't include at all
+            return null;
         }
     }
 }

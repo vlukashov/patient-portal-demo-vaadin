@@ -5,6 +5,7 @@ import com.vaadin.addon.charts.model.AxisType;
 import com.vaadin.addon.charts.model.ChartType;
 import com.vaadin.addon.charts.model.DataSeries;
 import com.vaadin.addon.charts.model.DataSeriesItem;
+import com.vaadin.demo.entities.Doctor;
 import com.vaadin.demo.service.AnalyticsService;
 import com.vaadin.demo.service.StringLongPair;
 import com.vaadin.navigator.View;
@@ -75,10 +76,18 @@ public class AnalyticsView extends VerticalLayout implements View {
         return getChart("Gender", service.getStatsByGender(), "Gender");
     }
 
+    private String nameOf(Doctor doctor) {
+        if(doctor != null) {
+            return "Dr. " + doctor.getLastName();
+        } else {
+            return "undefined";
+        }
+    }
+
     private Layout getDoctorChart() {
 
         List<StringLongPair> data = service.getStatsByDoctor().entrySet().stream()
-                .map(e -> new StringLongPair("Dr. " + e.getKey().getLastName(), e.getValue()))
+                .map(e -> new StringLongPair(nameOf(e.getKey()), e.getValue()))
                 .collect(Collectors.toList());
 
         return getChart("Patients per Doctor", data, "Doctor");

@@ -5,15 +5,11 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Viewport;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.demo.ui.security.SecurityUtils;
+import com.vaadin.demo.ui.views.LoginData;
 import com.vaadin.demo.ui.views.LoginView;
 import com.vaadin.demo.ui.views.MainView;
-import com.vaadin.demo.ui.views.analytics.AnalyticsView;
-import com.vaadin.demo.ui.views.patients.PatientsView;
-import com.vaadin.navigator.Navigator;
-import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
-import com.vaadin.shared.communication.PushMode;
 import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.UI;
@@ -55,10 +51,10 @@ public class PatientPortalUI extends UI {
         setContent(mainView);
     }
 
-    private boolean login(String username, String password) {
+    private boolean login(LoginData loginData) {
         try {
             Authentication token = authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(username, password));
+                    .authenticate(new UsernamePasswordAuthenticationToken(loginData.getUsername(), loginData.getPassword()));
             // Reinitialize the session to protect against session fixation attacks. This does not work
             // with websocket communication.
             VaadinService.reinitializeSession(VaadinService.getCurrentRequest());

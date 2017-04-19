@@ -5,7 +5,6 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Viewport;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.demo.ui.security.SecurityUtils;
-import com.vaadin.demo.ui.views.LoginData;
 import com.vaadin.demo.ui.views.LoginView;
 import com.vaadin.demo.ui.views.MainView;
 import com.vaadin.server.VaadinRequest;
@@ -51,7 +50,7 @@ public class PatientPortalUI extends UI {
         setContent(mainView);
     }
 
-    private boolean login(LoginData loginData) {
+    private boolean login(LoginView.LoginData loginData) {
         try {
             Authentication token = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(loginData.getUsername(), loginData.getPassword()));

@@ -8,6 +8,11 @@ import com.vaadin.ui.*;
 
 public class LoginView extends VerticalLayout {
 
+    final TextField usernameField;
+    final NativeButton loginButton;
+    final PasswordField passwordField;
+    final Label errorLabel;
+
     public class LoginData {
         private String username;
         private String password;
@@ -40,18 +45,19 @@ public class LoginView extends VerticalLayout {
         Label title = new Label("Patient Portal");
         title.addStyleName("h1");
 
-        TextField usernameField = new TextField("Username");
+        usernameField = new TextField("Username");
         usernameField.setValueChangeMode(ValueChangeMode.BLUR);
         usernameField.setId("login-username");
         usernameField.setWidth("100%");
-        PasswordField passwordField = new PasswordField("Password");
+        passwordField = new PasswordField("Password");
         passwordField.setValueChangeMode(ValueChangeMode.BLUR);
         passwordField.setId("login-password");
         passwordField.setWidth("100%");
 
-        Label errorLabel = new Label();
+        errorLabel = new Label();
+        errorLabel.setId("login-error");
 
-        NativeButton loginButton = new NativeButton("Login");
+        loginButton = new NativeButton("Login");
         loginButton.setId("login-button");
         loginButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         loginButton.addStyleName("primary");

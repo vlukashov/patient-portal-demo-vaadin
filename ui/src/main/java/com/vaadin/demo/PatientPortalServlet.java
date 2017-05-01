@@ -59,6 +59,7 @@ public class PatientPortalServlet extends SpringVaadinServlet {
         }
     }
 
+    /*
     @Override
     protected void service(HttpServletRequest request,
                            HttpServletResponse response) throws ServletException, IOException {
@@ -69,4 +70,5 @@ public class PatientPortalServlet extends SpringVaadinServlet {
 
         super.service(request, response);
     }
+    */
 }

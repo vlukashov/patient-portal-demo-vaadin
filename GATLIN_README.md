@@ -16,12 +16,14 @@ https://github.com/vaadin/spring/issues/203
 - Select Save preferences (to avoid filling all these values again later)
 - Select Strategy: Blacklist First
 - Add these to blacklist
+```
 .*\.woff
 .*\.(t|o)tf
 .*\.png
 .*\.js?(.*)
 .*\.css?(.*)
 .*\.txt
+```
 - Unselect "Infer html resource"
 - Check the listening port, and add it as proxy port to your browser
 - Close all other browsers
@@ -41,7 +43,9 @@ Where you can adjust the amount of user or time test should take. More user and/
 ## Run test
 - You can modify .scala recording file also at this point, calling gatlin.sh will recompile scala code
 - Start SpringBoot application from command line (IDE running slows it), and give as much memory as you have (at your project folder)
+```
 java -Xmx12G -jar ui/target/patient-portal-vaadin-ui-0.0.1-SNAPSHOT.jar
+```
 - Open VisualVM, and connect to SpringBoot application process
 - Open another console at gatlin's bin folder
 - Run in gatlin console: ./gatlin.sh (or .bat), this should compile scale code, and you should see your recording as option 0, select it, and hit enter twice (or fill optional fields)

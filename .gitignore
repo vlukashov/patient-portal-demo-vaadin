@@ -4,3 +4,6 @@ target
 vaadin-patient-portal.iml
 rebel.xml
 *.css
+.classpath
+.project
+.settings

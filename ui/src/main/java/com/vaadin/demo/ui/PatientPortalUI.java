@@ -1,6 +1,12 @@
 package com.vaadin.demo.ui;
 
-import com.vaadin.annotations.Push;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Viewport;
 import com.vaadin.annotations.Widgetset;
@@ -10,21 +16,13 @@ import com.vaadin.demo.ui.views.LoginView.LoginData;
 import com.vaadin.demo.ui.views.MainView;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
-import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.UI;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 @SpringUI
 @Theme("portal")
 @Viewport("width=device-width, initial-scale=1")
 @Widgetset("com.vaadin.demo.ui.PatientPortalWidgetSet")
-@Push(transport = Transport.WEBSOCKET_XHR)
 public class PatientPortalUI extends UI {
 
     @Autowired

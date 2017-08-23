@@ -1,15 +1,18 @@
 package com.vaadin.demo.ui.views.patients;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import io.reactivex.subjects.PublishSubject;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.vaadin.demo.ui.service.PatientsService;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
-import io.reactivex.subjects.PublishSubject;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @SpringComponent
 @ViewScope
@@ -32,7 +35,7 @@ public class SubViewNavigator {
                 Long id = p.getId();
                 if (id != null && !id.toString().equals(activeParams.get("id"))) {
                     activeParams.put("id", id.toString());
-                    navigateToPath(activePath);
+                    navigateToPath(fallback);
                 } else if (id == null) {
                     activeParams.remove("id");
                     navigateToPath("new");
@@ -151,6 +154,7 @@ public class SubViewNavigator {
 
     public void close() {
         patientsService.getCurrentPatient().onNext(Optional.empty());
+        activePath = fallback;
         Page.getCurrent().setUriFragment(prefix, false);
     }
 }

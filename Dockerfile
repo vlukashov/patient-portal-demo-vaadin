@@ -1,4 +1,4 @@
-FROM java:8
+FROM openjdk:8-jdk-alpine
 ARG datasourceUrl=localhost:3306
 ARG jpaAuto=none
 COPY ui/target/patient-portal-vaadin-ui-0.0.1-SNAPSHOT.jar app.jar

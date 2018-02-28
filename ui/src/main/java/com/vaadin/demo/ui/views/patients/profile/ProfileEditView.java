@@ -109,6 +109,7 @@ public class ProfileEditView extends VerticalLayoutView implements SubView {
         });
 
         addComponents(header, formLayout, new HorizontalLayout(saveButton, cancelButton, deleteButton));
+        formLayout.firstName.focus();
     }
 
     private void backOrClose() {

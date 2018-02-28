@@ -81,6 +81,10 @@ public class LoginView extends VerticalLayout {
                 errorLabel.setValue("Please fill both fields.");
             }
         });
+
+        usernameField.setValue("user");
+        passwordField.setValue("password");
+        usernameField.focus();
     }
 
 

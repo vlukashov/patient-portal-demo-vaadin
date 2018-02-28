@@ -22,7 +22,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <vaadin-version>8.1.0.alpha6</vaadin-version>
+        <vaadin-version>8.3.1</vaadin-version>
         <vaadin-charts-version>4.0.0</vaadin-charts-version>
     </properties>
 
@@ -30,7 +30,7 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-spring-boot-starter</artifactId>
-            <version>2.0-SNAPSHOT</version>
+            <version>3.0.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.tomcat.embed</groupId>
@@ -112,6 +112,12 @@
             <groupId>com.vaadin.example</groupId>
             <artifactId>vaadin-patient-portal-widgetset</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.4.0</version>
         </dependency>
     </dependencies>
 

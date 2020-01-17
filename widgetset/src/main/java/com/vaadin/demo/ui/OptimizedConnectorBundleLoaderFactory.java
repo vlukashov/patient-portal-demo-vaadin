@@ -41,7 +41,7 @@ public class OptimizedConnectorBundleLoaderFactory extends
         deferredConnectors.add(com.vaadin.client.connectors.grid.GridConnector.class.getName());
         deferredConnectors.add(com.vaadin.client.connectors.grid.DetailsManagerConnector.class.getName());
         deferredConnectors.add(com.vaadin.client.connectors.grid.EditorConnector.class.getName());
-        deferredConnectors.add(com.vaadin.client.connectors.ComponentRendererConnector.class.getName());
+        deferredConnectors.add(com.vaadin.client.connectors.grid.ComponentRendererConnector.class.getName());
         deferredConnectors.add(com.vaadin.client.connectors.grid.NoSelectionModelConnector.class.getName());
         deferredConnectors.add(com.vaadin.addon.charts.shared.ChartConnector.class.getName());
         deferredConnectors.add(com.vaadin.client.ui.tabsheet.TabsheetConnector.class.getName());

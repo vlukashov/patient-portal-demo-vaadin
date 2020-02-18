@@ -29,9 +29,14 @@ public class PatientPortalApplication {
 
         @Override
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-            auth
-                    .inMemoryAuthentication()
-                    .withUser("user").password("password").roles("USER");
+            // Create a default account
+            auth.inMemoryAuthentication()
+                    .withUser("admin")
+                    .password("password")
+                    .roles("ADMIN").and()
+                    .withUser("user")
+                    .password("password")
+                    .roles("USER");
         }
 
         @Bean
